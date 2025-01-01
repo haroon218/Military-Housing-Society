@@ -1,0 +1,216 @@
+:host ::ng-deep .p-tabview-nav li .p-tabview-selected {
+  font-weight: bold;
+  color: #1976d2; /* Change color when the tab is selected */
+}
+
+:host ::ng-deep .p-tabview-panel {
+  padding: 1em;
+}
+::ng-deep.custom-tabview .p-tabview-nav {
+  gap: 10px; /* Adds spacing between the tab headers */
+}
+
+::ng-deep.custom-tabview .p-tabview-nav li {
+  padding: 10px; /* Adjusts padding inside each tab header */
+}
+
+::ng-deep.custom-tabview .p-tabview-panel {
+  margin-top: 10px; /* Adds spacing between the tab headers and their content */
+}
+.form-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+.p-button-secondary {
+  color: #333;
+  padding: 8px;
+  border: 4px !important;
+  border: 1px solid #ccc;
+  background-color: #f0f0f0;
+}
+::ng-deep .p-datatable tbody tr {
+  height: 64px; /* Set the row height to 64px */
+  border-bottom: 1px solid rgb(225, 224, 224);
+}
+::ng-deep .p-datatable tbody th {
+  height: 48px; /* Set the row height to 64px */
+}
+::ng-deep tbody,
+td,
+tfoot,
+th,
+thead,
+tr {
+  padding: 8px !important;
+}
+.search-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+/* tab-2 */
+.search-bar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.search-bar input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px 0 0 8px;
+}
+.search-bar button {
+  padding: 10px 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 0 8px 8px 0;
+  background-color: white;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 40px;
+}
+.search-input {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  padding: 0.375rem 0.75rem;
+}
+.search-input i {
+  margin-right: 10px;
+  color: #6c757d;
+}
+.search-input input {
+  border: none;
+  outline: none;
+  flex-grow: 1;
+}
+.btn-add-company {
+  background-color: #6d428f;
+  color: white;
+}
+::ng-deep .p-datatable tbody tr {
+  height: 64px; /* Set the row height to 64px */
+  border-bottom: 1px solid rgb(225, 224, 224);
+}
+::ng-deep .p-datatable tbody th {
+  height: 48px; /* Set the row height to 64px */
+}
+::ng-deep .p-breadcrumb {
+  border-style: none;
+}
+::ng-deep .p-breadcrumb-list {
+  padding: 0;
+}
+
+::ng-deep tbody,
+td,
+tfoot,
+th,
+thead,
+tr {
+  padding: 8px !important;
+}
+.flex-container {
+  display: flex;
+  align-items: center; /* Align items vertically centered */
+}
+
+.icon {
+  width: 20px; /* Adjust the size of the icons as needed */
+  height: 20px; /* Maintain aspect ratio */
+  margin-right: 14px; /* Space between the icons and the balance text */
+}
+/* giveaway-dialog */
+/* dialog.component.css */
+/* dialog.component.css */
+/* dialog.component.css */
+/* dialog.component.css */
+
+/* Padding for the entire dialog */
+::ng-deep.p-dialog .giveaway-form {
+  padding: 20px; /* Main form padding */
+}
+
+/* Style for dialog header */
+::ng-deep.p-dialog .p-dialog-header {
+  padding: 15px 20px; /* Header padding for a better look */
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* Dialog content grid */
+::ng-deep.p-dialog .form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Form row to create two columns per row */
+::ng-deep.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* Form field styling */
+::ng-deep.form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Label styling */
+::ng-deep.form-field label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/* Input field styling */
+::ng-deep.form-field input {
+  padding: 10px;
+  border: 1px solid #d4d4d4;
+  border-radius: 4px;
+}
+
+/* Button row styling */
+::ng-deep.button-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* Add button styling */
+::ng-deep.p-button-raised {
+  background-color: #6d428f; /* Purple color */
+  color: white;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+/* Cancel button styling */
+::ng-deep.p-button-outlined {
+  border: 1px solid #d4d4d4;
+  border-radius: 4px;
+  padding: 8px;
+  color: rgb(26, 25, 25);
+}
+
+/* Dialog header close icon styling */
+::ng-deep.p-dialog .p-dialog-header .p-dialog-header-close {
+  right: 20px;
+}
+::ng-deep.delete {
+  background-color: #fee4e2; /* Purple color */
+  color: #b42318;
+  padding: 8px;
+  border-radius: 4px;
+}

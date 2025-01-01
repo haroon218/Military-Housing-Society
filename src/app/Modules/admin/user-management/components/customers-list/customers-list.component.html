@@ -1,0 +1,123 @@
+<div class="container">
+  <p-breadcrumb class="max-w-full" [model]="items">
+    <ng-template pTemplate="item" let-item>
+      <ng-container *ngIf="item.route; else elseBlock">
+        <a [routerLink]="item.route" class="p-menuitem-link">
+          <span [ngClass]="[item.icon ? item.icon : '', 'text-color']"></span>
+          <span class="text-primary font-semibold">{{ item.label }}</span>
+        </a>
+      </ng-container>
+      <ng-template #elseBlock>
+        <a [href]="item.url">
+          <span class="text-color">{{ item.label }}</span>
+        </a>
+      </ng-template>
+    </ng-template>
+  </p-breadcrumb>
+  <h2
+    style="color: #6d428f; font-size: 16px; line-height: 24px; font-weight: 600"
+  >
+    CustomerList
+  </h2>
+  <div>
+    <h6>Search</h6>
+    <div class="search-container">
+        <div class="search-input">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="search by Company name" />
+        </div>
+        
+        <p-dropdown 
+        (onChange)="valueChange($event)"
+            [options]="dropdownOptions" 
+            [(ngModel)]="selectedOption" 
+            placeholder="Select an option" 
+            class="dropdown"
+        ></p-dropdown>
+    
+        <button
+            class="btn btn-add-company"
+            routerLink="/user-management/customer-list"
+        >
+            Search
+        </button>
+    </div>
+    
+  </div>
+  <div class="card">
+    <p-table
+      #dt1
+      [value]="customers"
+      dataKey="id"
+      [rows]="10"
+      [rowsPerPageOptions]="[10, 25, 50]"
+      [loading]="loading"
+      [paginator]="true"
+      [globalFilterFields]="['representative.name']"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="min-width: 15rem">
+            <div class="flex align-items-center">Name</div>
+          </th>
+          <th style="min-width: 15rem">
+            <div class="flex align-items-center">Phone #</div>
+          </th>
+
+          <th style="min-width: 10rem">
+            <div class="flex align-items-center">
+              Branch
+              <p-columnFilter
+                type="numeric"
+                field="balance"
+                display="menu"
+                currency="USD"
+              />
+            </div>
+          </th>
+          <th style="min-width: 10rem">
+            <div class="flex align-items-center">Giveaway</div>
+          </th>
+          <th style="min-width: 10rem">
+            <div class="flex align-items-center">Actions</div>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-customer>
+        <tr>
+          <td>
+            {{ customer.name }}
+          </td>
+          <td>
+            <span class="ml-1 vertical-align-middle">{{
+              customer.country.name
+            }}</span>
+          </td>
+          <td>
+            <span class="ml-1 vertical-align-middle">{{
+              customer.representative.name
+            }}</span>
+          </td>
+          <td>
+            {{ customer.date | date : "MM/dd/yyyy" }}
+          </td>
+          <td>
+            <div class="flex-container">
+              <img src="/assets/view-icon.svg" style="cursor: pointer;" (click)="navigateToViewList(customer.id)" alt="First Image" class="icon" />
+              <img
+                src="/assets/gift-icon.svg"
+                alt="Second Image"
+                class="icon"
+              />
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="7">No customers found.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

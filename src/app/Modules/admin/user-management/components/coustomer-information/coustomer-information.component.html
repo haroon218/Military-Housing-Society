@@ -1,0 +1,578 @@
+<p-tabView class="custom-tabview">
+  <p-tabPanel header="Information" [leftIcon]="'pi pi-info-circle'">
+    <form [formGroup]="addCompanyForm" (ngSubmit)="onSubmit()">
+      <div class="row mb-3">
+        <div class="col-md-4 mb-3">
+          <label for="name" class="form-label">Customer Name</label>
+          <input
+            pInputText
+            id="name"
+            formControlName="name"
+            class="form-control"
+            placeholder="Enter name"
+            [ngClass]="{
+              'is-invalid':
+                addCompanyForm.get('name')?.invalid &&
+                addCompanyForm.get('name')?.touched
+            }"
+          />
+          <div
+            *ngIf="
+              addCompanyForm.get('name')?.invalid &&
+              addCompanyForm.get('name')?.touched
+            "
+            class="invalid-feedback"
+          >
+            <small *ngIf="addCompanyForm.get('name')?.errors?.['required']"
+              >Name is required.</small
+            >
+          </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <label for="mobile" class="form-label">Phone #</label>
+          <input
+            pInputText
+            id="mobile"
+            formControlName="mobile"
+            class="form-control"
+            placeholder="Enter mobile number"
+            [ngClass]="{
+              'is-invalid':
+                addCompanyForm.get('mobile')?.invalid &&
+                addCompanyForm.get('mobile')?.touched
+            }"
+          />
+          <div
+            *ngIf="
+              addCompanyForm.get('mobile')?.invalid &&
+              addCompanyForm.get('mobile')?.touched
+            "
+            class="invalid-feedback"
+          >
+            <small *ngIf="addCompanyForm.get('mobile')?.errors?.['required']"
+              >Mobile number is required.</small
+            >
+            <small *ngIf="addCompanyForm.get('mobile')?.errors?.['pattern']"
+              >Enter a valid 10-digit mobile number.</small
+            >
+          </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <label for="email" class="form-label">Date of Birth</label>
+          <input
+            pInputText
+            id="email"
+            formControlName="email"
+            class="form-control"
+            placeholder="Enter email"
+            [ngClass]="{
+              'is-invalid':
+                addCompanyForm.get('email')?.invalid &&
+                addCompanyForm.get('email')?.touched
+            }"
+          />
+          <div
+            *ngIf="
+              addCompanyForm.get('email')?.invalid &&
+              addCompanyForm.get('email')?.touched
+            "
+            class="invalid-feedback"
+          >
+            <small *ngIf="addCompanyForm.get('email')?.errors?.['required']"
+              >Email is required.</small
+            >
+            <small *ngIf="addCompanyForm.get('email')?.errors?.['email']"
+              >Enter a valid email address.</small
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-4 mb-3">
+          <label for="address" class="form-label">Registration Date</label>
+          <input
+            pInputText
+            id="address"
+            formControlName="address"
+            class="form-control"
+            placeholder="Enter address"
+            [ngClass]="{
+              'is-invalid':
+                addCompanyForm.get('address')?.invalid &&
+                addCompanyForm.get('address')?.touched
+            }"
+          />
+          <div
+            *ngIf="
+              addCompanyForm.get('address')?.invalid &&
+              addCompanyForm.get('address')?.touched
+            "
+            class="invalid-feedback"
+          >
+            <small *ngIf="addCompanyForm.get('address')?.errors?.['required']"
+              >Address is required.</small
+            >
+          </div>
+        </div>
+
+        <!-- Add more form fields below in a similar manner, to fill the row with three columns -->
+        <div class="col-md-4 mb-3">
+          <label for="address" class="form-label">Label</label>
+          <input
+            pInputText
+            id="address"
+            formControlName="address"
+            class="form-control"
+            placeholder="Enter address"
+            [ngClass]="{
+              'is-invalid':
+                addCompanyForm.get('address')?.invalid &&
+                addCompanyForm.get('address')?.touched
+            }"
+          />
+          <div
+            *ngIf="
+              addCompanyForm.get('address')?.invalid &&
+              addCompanyForm.get('address')?.touched
+            "
+            class="invalid-feedback"
+          >
+            <small *ngIf="addCompanyForm.get('address')?.errors?.['required']"
+              >Address is required.</small
+            >
+          </div>
+        </div>
+        <div class="col-md-4 mb-3">
+          <label for="address" class="form-label">Label</label>
+          <input
+            pInputText
+            id="address"
+            formControlName="address"
+            class="form-control"
+            placeholder="Enter address"
+            [ngClass]="{
+              'is-invalid':
+                addCompanyForm.get('address')?.invalid &&
+                addCompanyForm.get('address')?.touched
+            }"
+          />
+          <div
+            *ngIf="
+              addCompanyForm.get('address')?.invalid &&
+              addCompanyForm.get('address')?.touched
+            "
+            class="invalid-feedback"
+          >
+            <small *ngIf="addCompanyForm.get('address')?.errors?.['required']"
+              >Address is required.</small
+            >
+          </div>
+        </div>
+      </div>
+
+      <div >
+        <button
+          style="
+            padding: 8px;
+            border-radius: 8px;
+            color:black;
+            width: 100px;
+            margin-bottom: 30px;
+            background-color: white;
+            border: 1px solid rgb(176, 176, 176);
+          "
+          pButton
+          type="submit"
+          label="Edit "
+        ></button>
+      </div>
+    </form>
+
+    <div>
+      <div class="search-container">
+        <div style="color: #6d428f">Customer Logs</div>
+      </div>
+    </div>
+    <div class="card">
+      <p-table
+        #dt1
+        [value]="customers"
+        dataKey="id"
+        [rows]="perPage"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [loading]="loading"
+        [paginator]="true"
+        [totalRecords]="totalRecords"
+        (onPage)="onPageChange($event)"
+        [globalFilterFields]="['representative.name']"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="min-width: 15rem">
+              <div class="flex align-items-center">Log Type</div>
+            </th>
+            <th style="min-width: 15rem">
+              <div class="flex align-items-center">Date and Time</div>
+            </th>
+            <th style="min-width: 10rem">
+              <div class="flex align-items-center">Company Name</div>
+            </th>
+            <th style="min-width: 10rem">
+              <div class="flex align-items-center">Comment</div>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-customer>
+          <tr>
+            <td>
+              <span class="ml-1 vertical-align-middle">{{
+                customer.name
+              }}</span>
+            </td>
+            <td>
+              <span class="ml-1 vertical-align-middle">{{
+                customer.email
+              }}</span>
+            </td>
+            <td>{{ customer.mobile }}</td>
+            <td>{{ customer.address }}</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="6">No Log found.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </p-tabPanel>
+  <p-tabPanel header="Giveaway List" [leftIcon]="'pi pi-gift'">
+    <div>
+      <div style="display: flex; justify-content: space-between">
+        <h2
+          style="
+            color: #6d428f;
+            font-size: 16px;
+            line-height: 24px;
+            font-weight: 600;
+          "
+        >
+          Giveaway List
+        </h2>
+        <button
+          style="
+            border: 1px solid rgb(176, 172, 172);
+            align-items: baseline;
+            margin-bottom: 40px;
+          "
+          class="btn"
+          (click)="openDialog()"
+        >
+          Add Giveaway
+        </button>
+      </div>
+    </div>
+    <div class="card">
+      <p-table
+        #dt1
+        [value]="giveAwayList"
+        dataKey="id"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [loading]="loading"
+        [paginator]="true"
+        [globalFilterFields]="['representative.name']"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="min-width: 15rem">
+              <div class="flex align-items-center">Giveaway Type</div>
+            </th>
+            <th style="min-width: 15rem">
+              <div class="flex align-items-center">Company Name</div>
+            </th>
+
+            <th style="min-width: 10rem">
+              <div class="flex align-items-center">
+                Branch
+                <p-columnFilter
+                  type="numeric"
+                  field="balance"
+                  display="menu"
+                  currency="USD"
+                />
+              </div>
+            </th>
+            <th style="min-width: 10rem">
+              <div class="flex align-items-center">Date and Time</div>
+            </th>
+            <th style="min-width: 10rem">
+              <div class="flex align-items-center">Actions</div>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-customer>
+          <tr>
+            <td>
+              {{ customer.type }}
+            </td>
+            <td>
+              <span class="ml-1 vertical-align-middle">{{
+                customer.null
+              }}</span>
+            </td>
+            <td>
+              <span class="ml-1 vertical-align-middle">{{
+                customer.nullList
+              }}</span>
+            </td>
+            <td>
+              {{ customer.date }}
+            </td>
+            <td>
+              <div class="flex-container">
+                <img (click)="openDialog()"
+                  src="/assets/view-icon.svg"
+                  alt="First Image"
+                  class="icon"
+                />
+                <img
+                  (click)="ondelete()"
+                  src="/assets/delete.svg"
+                  alt="Second Image"
+                  class="icon"
+                />
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="7">No Giveaway List found.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </p-tabPanel>
+  <p-tabPanel header="Task List" [leftIcon]="'pi pi-users'">
+    <div>
+      <div class="search-container" style="align-items: baseline;font-weight: 600;">
+        <p>Task list</p>
+        <button class="btn btn-outline-secondary"(click)="addTask()">Add Task</button>
+      </div>
+    </div>
+    <div class="card">
+      <p-table
+        #dt1
+        [value]="customersData"
+        dataKey="id"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [loading]="loading"
+        [paginator]="true"
+        [globalFilterFields]="['representative.name']"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="min-width: 15rem">
+              <div class="flex align-items-center">Task Name</div>
+            </th>
+            <th style="min-width: 15rem">
+              <div class="flex align-items-center">Task Type</div>
+            </th>
+
+            <th style="min-width: 10rem">
+              <div class="flex align-items-center">
+                Percentage
+                <p-columnFilter
+                  type="numeric"
+                  field="balance"
+                  display="menu"
+                  currency="USD"
+                />
+              </div>
+            </th>
+            <th style="min-width: 10rem">
+              <div class="flex align-items-center">Date and Time</div>
+            </th>
+            <th style="min-width: 10rem">
+              <div class="flex align-items-center">Actions</div>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-customer>
+          <tr>
+            <td>
+              {{ customer.name }}
+            </td>
+            <td>
+              <span class="ml-1 vertical-align-middle">{{
+                customer.company.name
+              }}</span>
+            </td>
+            <td>
+              <span class="ml-1 vertical-align-middle">{{
+                customer.representative.name
+              }}</span>
+            </td>
+            <td>
+              {{ customer.customerName }}
+            </td>
+            <td>
+              <div class="flex-container">
+                <img  (click)="addTask()"
+                  src="/assets/view-icon.svg"
+                  alt="First Image"
+                  class="icon"
+                />
+               
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="7">No customers found.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </p-tabPanel>
+</p-tabView>
+<!-- dialog.component.html -->
+<!-- dialog.component.html -->
+<p-dialog
+  [(visible)]="display"
+  [modal]="true"
+  [header]="'Add Giveaway'"
+  [closable]="true"
+  [style]="{ width: '50vw' }"
+>
+  <form [formGroup]="giveawayForm" class="giveaway-form">
+    <div class="form-grid">
+      <div class="form-row" *ngFor="let row of rowFields">
+        <div class="form-field" *ngIf="row[0]">
+          <label>{{ row[0].label }}</label>
+          <input
+            type="text"
+            formControlName="{{ row[0].name }}"
+            placeholder="Entered text"
+          />
+        </div>
+        <div class="form-field" *ngIf="row[1]">
+          <label>{{ row[1].label }}</label>
+          <input
+            type="text"
+            formControlName="{{ row[1].name }}"
+            placeholder="Entered text"
+          />
+        </div>
+        <div class="form-field" *ngIf="row[2]">
+          <label>{{ row[2].label }}</label>
+          <input
+            type="text"
+            formControlName="{{ row[2].name }}"
+            placeholder="Entered text"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="button-row">
+      <button
+        pButton
+        label="Cancel"
+        class="p-button-outlined"
+        (click)="onCancel()"
+      ></button>
+      <button
+        pButton
+        label="Add Giveaway"
+        class="p-button-raised"
+        (click)="onAddGiveaway()"
+      ></button>
+    </div>
+  </form>
+</p-dialog>
+<p-dialog
+  [(visible)]="delete"
+  [modal]="true"
+  [header]="'Delete Giveaway'"
+  [closable]="true"
+  [style]="{ width: '40vw' }"
+>
+  <div class="giveaway-form">
+    <p>Are you sure you want to delete this give away</p>
+
+    <div class="button-row">
+      <button
+        pButton
+        label="Cancel"
+        class="p-button-outlined"
+        (click)="onDeleteCancel()"
+      ></button>
+      <button
+        pButton
+        label="Delete"
+        class="delete"
+        (click)="onAddGiveaway()"
+      ></button>
+    </div>
+  </div>
+</p-dialog>
+<p-dialog
+  [(visible)]="task"
+  [modal]="true"
+  [header]="'Add Task'"
+  [closable]="true"
+  [style]="{ width: '50vw' }"
+>
+  <form [formGroup]="giveawayForm" class="giveaway-form">
+    <div class="form-grid">
+      <div class="form-row" *ngFor="let row of rowFields">
+        <div class="form-field" *ngIf="row[0]">
+          <label>{{ row[0].label }}</label>
+          <input
+            type="text"
+            formControlName="{{ row[0].name }}"
+            placeholder="Entered text"
+          />
+        </div>
+        <div class="form-field" *ngIf="row[1]">
+          <label>{{ row[1].label }}</label>
+          <input
+            type="text"
+            formControlName="{{ row[1].name }}"
+            placeholder="Entered text"
+          />
+        </div>
+        <div class="form-field" *ngIf="row[2]">
+          <label>{{ row[2].label }}</label>
+          <input
+            type="text"
+            formControlName="{{ row[2].name }}"
+            placeholder="Entered text"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="button-row">
+      <button
+        pButton
+        label="Cancel"
+        class="p-button-outlined"
+        (click)="onCancel()"
+      ></button>
+      <button
+        pButton
+        label="Add Task"
+        class="p-button-raised"
+        (click)="onAddGiveaway()"
+      ></button>
+    </div>
+  </form>
+</p-dialog>
