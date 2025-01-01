@@ -1,7 +1,7 @@
 <div class="sidebar" >
   <div class="sidebar-header">
-    <img src="/assets/Logo.svg" alt="Logo" class="sidebar-logo">
-    <h2 class="sidebar-title">{{ 'SIDEBAR.TITLE' | translate }}</h2>
+    <img src="/assets/Logo.png" alt="Logo" class="sidebar-logo">
+    <h2 class="sidebar-title">ReportEase</h2>
   </div>
 
   <div class="sidebar-menu">
@@ -16,7 +16,7 @@
     </div>
 
     <!-- Users Management Section -->
-    <div class="submenu-container" style="background-color: #ffffff; margin-bottom: 16px; border-radius: 7px;">
+    <!-- <div class="submenu-container" style="background-color: #ffffff; margin-bottom: 16px; border-radius: 7px;">
       <p-accordion [activeIndex]="activeTab === 'users' ? 0 : -1">
         <p-accordionTab (click)="setActiveTab('users')">
           <ng-template pTemplate="header">
@@ -44,10 +44,10 @@
           </div>
         </p-accordionTab>
       </p-accordion>
-    </div>
+    </div> -->
 
     <!-- Campaigns Section with Nested Accordion -->
-    <div class="submenu-container" style="background-color: #ffffff; margin-bottom: 16px;border-radius: 7px;">
+    <!-- <div class="submenu-container" style="background-color: #ffffff; margin-bottom: 16px;border-radius: 7px;">
       <p-accordion [activeIndex]="activeTab === 'campaigns' ? 0 : -1">
         <p-accordionTab (click)="setActiveTab('campaigns')">
           <ng-template pTemplate="header">
@@ -67,7 +67,7 @@
           
         </p-accordionTab>
       </p-accordion>
-    </div>
+    </div> -->
     <div class="menu-item" routerLink="feedback/feed-back" routerLinkActive="active-link">
       <img src="/assets/Leading-Icon.svg" alt="Dashboard Icon" width="16" height="16">
       <span class="d-none d-md-inline">Feedback center</span>
