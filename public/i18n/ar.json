@@ -1,0 +1,60 @@
+{
+  "SIDEBAR": {
+    "TITLE": "RMR",
+    "DASHBOARD": "لوحة القيادة",
+    "REPORTS": "التقارير",
+    "USERS": "إدارة المستخدمين",
+    "GROUP_LIST": "قائمة المجموعات",
+    "COMPANIES_LIST": "قائمة الشركات",
+    "CUSTOMERS_LIST": "قائمة العملاء",
+    "CAMPAIGNS": "الحملات",
+    "CAMPAIGN_LIST": "قائمة الحملات",
+    "CAMPAIGN_ORDER": "طلب حملة",
+    "CAMPAIGN_REWARD_LIST": "قائمة مكافآت الحملات",
+    "REWARDS": "مركز المكافآت والعروض",
+    "REWARD_LIST": "قائمة المكافآت",
+    "OFFER_LIST": "قائمة العروض"
+  },
+  "DASHBOARD": {
+    "TITLE": "لوحة التحكم",
+    "GENERAL_NUMBERS": "الأرقام العامة",
+    "NUMBER_OF_COMPANIES": "عدد الشركات",
+    "NUMBER_OF_CUSTOMERS": "عدد العملاء",
+    "CAMPAIGNS_ORDERS": "طلبات الحملات",
+    "NEW": "جديد",
+    "RETURNED_ORDERS": "طلبات مرتجعة",
+    "ACCEPTED": "مقبول",
+    "REJECTED": "مرفوض"
+},
+"REPORTS": {
+        "TITLE": "التقارير",
+        "SEARCH_PLACEHOLDER": "البحث عن اسم التقرير",
+        "SEARCH": "بحث",
+        "TRANSACTION_REPORT": "تقرير المعاملات",
+        "TRANSACTION_REPORT_DESC": "تفاصيل المعاملات المالية، بما في ذلك المبالغ والتواريخ.",
+        "FEEDBACK_REPORT": "تقرير التغذية الراجعة",
+        "FEEDBACK_REPORT_DESC": "تلخيص تعليقات المستخدمين واقتراحاتهم للتحسين.",
+        "AWARDS_REPORT": "تقرير الجوائز",
+        "AWARDS_REPORT_DESC": "قائمة بجميع الجوائز المعطاة.",
+        "REFERRED_REPORT": "تقرير المحال",
+        "REFERRED_REPORT_DESC": "يحتوي على معلومات حول الحالات المحالة.",
+        "DOWNLOAD": "تنزيل"
+    },
+    "COMPANIES_LIST": {
+      "TITLE": "قائمة الشركات",
+      "SEARCH_LABEL": "بحث",
+      "SEARCH_PLACEHOLDER": "البحث عن اسم الشركة",
+      "SEARCH": "بحث",
+      "ADD_COMPANY": "إضافة شركة",
+      "NAME": "الاسم",
+      "EMAIL": "البريد الإلكتروني",
+      "MOBILE": "الهاتف المحمول",
+      "ADDRESS": "العنوان",
+      "CREATED_AT": "تاريخ الإنشاء",
+      "ACTIONS": "العمليات",
+      "VIEW_ALT": "عرض",
+      "GIFT_ALT": "هدية",
+      "NO_COMPANIES": "لم يتم إضافة أي شركات بعد."
+  },
+  "LANGUAGE_CHANGE_SUCCESS": "تم تغيير اللغة بنجاح!"
+}

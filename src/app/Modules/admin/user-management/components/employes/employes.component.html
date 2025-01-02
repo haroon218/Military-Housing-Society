@@ -1,0 +1,321 @@
+<div class="container">
+  <p-breadcrumb class="max-w-full">
+    <ng-template pTemplate="item" let-item>
+      <ng-container *ngIf="item.route; else elseBlock">
+        <a [routerLink]="item.route" class="p-menuitem-link">
+          <span [ngClass]="[item.icon ? item.icon : '', 'text-color']"></span>
+          <span class="text-primary font-semibold">{{
+            item.label | translate
+          }}</span>
+        </a>
+      </ng-container>
+      <ng-template #elseBlock>
+        <a [href]="item.url">
+          <span class="text-color">{{ item.label | translate }}</span>
+        </a>
+      </ng-template>
+    </ng-template>
+  </p-breadcrumb>
+
+  <h2
+    style="color: #6d428f; font-size: 16px; line-height: 24px; font-weight: 600"
+  >
+    Employees List
+  </h2>
+
+  <div>
+    <h6>{{ "COMPANIES_LIST.SEARCH_LABEL" | translate }}</h6>
+    <div class="search-container">
+      <div class="search-input">
+        <i class="fas fa-search"></i>
+        <input
+            type="text"
+            placeholder="Search by employee name"
+            [(ngModel)]="searchTerm"
+        />
+    </div>
+    <button class="btn btn-outline-secondary" (click)="loadEmployees()">
+        {{ "COMPANIES_LIST.SEARCH" | translate }}
+    </button>
+    
+
+      <!-- Dropdown for Branch List -->
+      <p-dropdown
+        [options]="branches"
+        optionLabel="name"
+        optionValue="id"
+        placeholder="Select Branch"
+        [(ngModel)]="selectedBranch"
+        (onChange)="loadEmployees()"
+        class="ml-2"
+        class="custom-dropdown"
+      ></p-dropdown>
+
+      <button class="btn btn-add-company" type="button" (click)="openDialog()">
+        Add Employee
+      </button>
+    </div>
+  </div>
+
+  <div class="card">
+    <p-table
+      #dt1
+      [value]="employees"
+      dataKey="id"
+      [rows]="perPage"
+      [rowsPerPageOptions]="[10, 25, 50]"
+      [loading]="loading"
+      [paginator]="true"
+      [totalRecords]="totalRecords"
+      (onPage)="onPageChange($event)"
+      [globalFilterFields]="['representative.name']"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="min-width: 15rem">
+            <div class="flex align-items-center">
+              {{ "COMPANIES_LIST.NAME" | translate }}
+            </div>
+          </th>
+          <th style="min-width: 15rem">
+            <div class="flex align-items-center">
+              {{ "COMPANIES_LIST.EMAIL" | translate }}
+            </div>
+          </th>
+          <th style="min-width: 10rem">
+            <div class="flex align-items-center">
+              {{ "COMPANIES_LIST.MOBILE" | translate }}
+            </div>
+          </th>
+          <th style="min-width: 10rem">
+            <div class="flex align-items-center">
+              Role
+            </div>
+          </th>
+
+          <th style="min-width: 10rem">
+            <div class="flex align-items-center">
+              {{ "COMPANIES_LIST.ACTIONS" | translate }}
+            </div>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-employees>
+        <tr>
+          <td>
+            <span class="ml-1 vertical-align-middle">{{ employees.name }}</span>
+          </td>
+          <td>
+            <span class="ml-1 vertical-align-middle">{{
+              employees.email
+            }}</span>
+          </td>
+          <td>{{ employees.mobile }}</td>
+          <td>{{ employees.role }}</td>
+
+          <td>
+            <div class="flex-container">
+              <img
+                src="/assets/edit.svg"
+                alt="{{ 'COMPANIES_LIST.VIEW_ALT' | translate }}"
+                class="icon"
+                (click)="openEditDialog(employees)"
+              />
+              <img
+                src="/assets/delete.svg"
+                alt="{{ 'COMPANIES_LIST.GIFT_ALT' | translate }}"
+                class="icon"
+                (click)="onDelete(employees.id,employees.name)"
+              />
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6">
+            <div
+              style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                flex-direction: column;
+              "
+            >
+              <img src="/assets/no-data.svg" alt="" />
+              <div>No Employees added yet</div>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+<p-dialog
+  [(visible)]="display"
+  [modal]="true"
+  [header]="selectedEmployee ? 'Edit Employee' : 'Add Employee'"  [closable]="true"
+  [style]="{ width: '50vw' }"
+>
+<form [formGroup]="addEmployeeForm" class="giveaway-form" (ngSubmit)="addEmployee()">
+  <div class="form-grid">
+    <div class="form-row">
+      <!-- Name Field -->
+      <div class="form-field" [ngClass]="{'has-error': addEmployeeForm.controls['name'].invalid && addEmployeeForm.controls['name'].touched}">
+        <label for="name">Name</label>
+        <input id="name" type="text" formControlName="name" placeholder="Enter Employee Name" />
+        <div class="error-message" *ngIf="addEmployeeForm.controls['name'].invalid && addEmployeeForm.controls['name'].touched">
+          <ng-container *ngIf="addEmployeeForm.controls['name'].errors?.['required']">
+            Name is required.
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- Mobile Field -->
+      <div class="form-field" [ngClass]="{'has-error': addEmployeeForm.controls['mobile'].invalid && addEmployeeForm.controls['mobile'].touched}">
+        <label for="mobile">Mobile</label>
+        <input
+        id="mobile"
+        type="number"
+        formControlName="mobile"
+        placeholder="Enter mobile"
+        [attr.inputmode]="'numeric'" 
+        class="no-spinner"
+      />        <div class="error-message" *ngIf="addEmployeeForm.controls['mobile'].invalid && addEmployeeForm.controls['mobile'].touched">
+          <ng-container *ngIf="addEmployeeForm.controls['mobile'].errors?.['required']">
+            Mobile is required.
+          </ng-container>
+          <ng-container *ngIf="addEmployeeForm.controls['mobile'].errors?.['pattern']">
+            Mobile number must be numeric.
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <!-- Email Field -->
+      <div class="form-field" [ngClass]="{'has-error': addEmployeeForm.controls['email'].invalid && addEmployeeForm.controls['email'].touched}">
+        <label for="email">Email</label>
+        <input id="email" type="email" formControlName="email" placeholder="Enter Email" />
+        <div class="error-message" *ngIf="addEmployeeForm.controls['email'].invalid && addEmployeeForm.controls['email'].touched">
+          <ng-container *ngIf="addEmployeeForm.controls['email'].errors?.['required']">
+            Email is required.
+          </ng-container>
+          <ng-container *ngIf="addEmployeeForm.controls['email'].errors?.['email']">
+            Please enter a valid email address.
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-field" [ngClass]="{'has-error': addEmployeeForm.controls['password'].invalid && addEmployeeForm.controls['password'].touched}">
+        <label for="password">Password</label>
+        <input id="password" type="password" formControlName="password" placeholder="Enter password" />
+        <div class="error-message" *ngIf="addEmployeeForm.controls['password'].invalid && addEmployeeForm.controls['password'].touched">
+          <ng-container *ngIf="addEmployeeForm.controls['password'].errors?.['required']">
+            Password is required.
+          </ng-container>
+          <ng-container *ngIf="addEmployeeForm.controls['password'].errors?.['minlength']">
+            Password must be at least 8 characters long.
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <!-- Branch Dropdown Field -->
+      <div class="form-field">
+        <label for="regionDropdown">Roles</label>
+        <p-dropdown id="regionDropdown" [options]="roles" optionLabel="name" placeholder="Select Role" optionValue="name" formControlName="role" (onChange)="onRoleChange($event.value)" class="custom-dropdown"></p-dropdown>
+      </div>
+      <div class="form-field" *ngIf="selectedRole === 'CompanyAdmin'">
+        <label for="company">Company</label>
+        <p-dropdown
+          id="company"
+          [options]="companies"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="Select Company"
+          formControlName="company_id"
+        ></p-dropdown>
+      </div>
+      <div class="form-field" *ngIf="selectedRole === 'BranchAdmin'">
+        <label for="branch">Branch</label>
+        <p-dropdown
+          id="branch"
+          [options]="branches"
+          optionLabel="name"
+          optionValue="id"
+
+          placeholder="Select Branch"
+          formControlName="branch_id"
+        ></p-dropdown>
+      </div>
+      <div class="form-field" *ngIf="selectedRole === 'GroupAdmin'">
+        <label for="group">Group</label>
+        <p-dropdown
+          id="group"
+          [options]="groups"
+          optionLabel="name"
+          optionValue="id"
+
+          placeholder="Select Group"
+          formControlName="group_id"
+        ></p-dropdown>
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <!-- Submit Button -->
+  <div class="button-row">
+    <button pButton label="Cancel" class="p-button-outlined" (click)="onCancel()" type="button"></button>
+    <button pButton [label]="selectedEmployee ? 'Update Employee' : 'Add Employee'" class="p-button-raised" type="submit"></button>
+  </div>
+</form>
+
+</p-dialog>
+<p-dialog
+[(visible)]="delete"
+[modal]="true"
+[header]="'Delete City'"
+[closable]="true"
+[style]="{ width: '30vw' }"
+>
+<div class="giveaway-form">
+  <p>Are you sure you want to delete <strong>{{ employeeNameToDelete }}</strong>?</p>
+
+  <div class="button-row">
+    <button
+      pButton
+      label="Cancel"
+      class="p-button-outlined"
+      (click)="onDeleteCancel()"
+      [disabled]="isLoading"
+    ></button>
+
+    <button
+      pButton
+      class="p-button-raised"
+      [disabled]="isLoading"
+      (click)="confirmDelete()"
+    >
+      <ng-container *ngIf="isLoading; else deletebuttonLabel">
+        <span class="loading-text">{{ loadingText }}</span>
+        <div class="loading-dots">
+          <span class="dot" *ngFor="let dot of [1,2,3]; let i = index" [ngClass]="{'animate': isLoading}"></span>
+        </div>
+      </ng-container>
+      <ng-template #deletebuttonLabel>
+        {{isLoading ? loadingText : 'Delete' }}
+      </ng-template>
+    </button>
+  </div>
+
+  <!-- Loading animation -->
+  
+</div>
+</p-dialog>

@@ -1,0 +1,49 @@
+<!-- Header Component HTML -->
+<header class="header-container">
+    <div class="header-left">
+        <!-- <h1 class="app-title">My Application</h1> -->
+    </div>
+    <div class="header-right">
+        <!-- Notification Icon -->
+        <div class="notification-icon">
+            <i class="pi pi-bell" style="font-size: 1.5rem; color: #6d428f;"></i>
+        </div>
+
+        <!-- Language Switch Dropdown using PrimeNG -->
+        <p-dropdown 
+            [options]="languages" 
+            [(ngModel)]="selectedLanguage" 
+            optionLabel="label" 
+            [style]="{'width':'150px'}"
+            (onChange)="onLanguageChange(selectedLanguage)"
+            placeholder="Select Language">
+            <ng-template let-item pTemplate="selectedItem">
+                <div class="p-d-flex p-ai-center">
+                    <img [src]="item.icon" alt="{{ item.label }} Icon" width="20" height="20" class="dropdown-language-icon" />
+                    <span style="margin-left: 10px;">{{ item.label }}</span>
+                </div>
+            </ng-template>
+            <ng-template let-item pTemplate="item">
+                <div class="p-d-flex p-ai-center">
+                    <img [src]="item.icon" alt="{{ item.label }} Icon" width="20" height="20" class="dropdown-language-icon" />
+                    <span style="margin-left: 10px;">{{ item.label }}</span>
+                </div>
+            </ng-template>
+        </p-dropdown>
+
+        <!-- Profile Image and Dropdown -->
+        <div class="profile-container" style="position: relative; margin-left: 15px;">
+            <img src="/assets/profile.svg" alt="Profile" class="profile-icon" (click)="toggleProfileMenu()" />
+            <p-dropdown 
+                *ngIf="profileMenuVisible" 
+                [options]="profileOptions" 
+                (onChange)="onProfileOptionChange($event.value)"
+                placeholder="Profile Options"
+                [style]="{'width':'150px','padding-left':'10px'}">
+                <ng-template let-item pTemplate="item">
+                    <span>{{ item.label }}</span>
+                </ng-template>
+            </p-dropdown>
+        </div>
+    </div>
+</header>

@@ -1,0 +1,73 @@
+.container {
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.p-button-primary {
+  background-color: #6d428f;
+  padding: 8px 26.5px;
+  border-radius: 4px; /* Replace with your preferred color */
+}
+
+.p-button-secondary {
+  color: #333;
+  padding: 8px;
+  border: 4px !important;
+  border: 1px solid #ccc;
+  background-color: #f0f0f0;
+}
+.is-invalid {
+  border-color: #dc3545;
+}
+
+.invalid-feedback {
+  color: #dc3545;
+}
+/* Adjust the position and width of the toast container */
+::ng-deep.p-toast {
+  top: 2rem !important; /* Adjust the top position for better placement */
+  right: 2rem !important; /* Move the toast slightly to the right */
+  width: auto !important; /* Auto width to fit content */
+  max-width: 300px; /* Set a maximum width to keep toasts compact */
+}
+
+/* Styling for toast messages to enhance appearance */
+::ng-deep.p-toast-message {
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for better focus */
+}
+
+/* Success message styling */
+::ng-deep.p-toast-message-success {
+  background-color: #4caf50 !important; /* Success green color */
+  color: #ffffff !important; /* White text color for contrast */
+}
+
+/* Error message styling */
+::ng-deep.p-toast-message-error {
+  background-color: #f44336 !important; /* Error red color */
+  color: #ffffff !important; /* White text color for contrast */
+}
+
+/* Adjust the icon size and position */
+::ng-deep.p-toast-icon {
+  font-size: 1.2rem !important; /* Slightly larger icon */
+  margin-right: 0.5rem !important; /* Add some spacing to the right of the icon */
+}
+
+/* Increase the font size for better readability */
+::ng-deep.p-toast-message-text {
+  font-size: 0.95rem !important; /* Slightly larger text */
+}
+
+/* Custom styling for the toast close button */
+::ng-deep.p-toast-close-icon {
+  font-size: 1rem !important; /* Set a size for the close icon */
+  color: #ffffff !important; /* Use white color to match the toast's background */
+  opacity: 0.8 !important; /* Slight transparency */
+}

@@ -1,0 +1,50 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body,
+html {
+  height: 100%;
+  width: 100%;
+}
+
+/* Wrapper to contain the whole layout */
+.wrapper {
+  display: flex;
+  height: 100vh; /* Full viewport height */
+}
+
+/* Sidebar styling */
+.sidebar {
+  width: 268px; /* Fixed width for the sidebar */
+  background-color: #f3f4f6;
+  height: 100%; /* Full height of the viewport */
+  flex-shrink: 0; /* Prevent the sidebar from shrinking */
+  position: sticky; /* Keeps sidebar fixed while scrolling */
+  top: 0;
+}
+
+/* Main content area to the right of the sidebar */
+.main-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* Takes up the remaining width */
+}
+
+/* Header styling inside the main content area */
+app-header {
+  height: 69px; /* Fixed height for the header */
+  width: 100%;
+  flex-shrink: 0; /* Prevents header from shrinking */
+}
+
+/* Content area styling */
+.content {
+  flex: 1; /* Takes up the remaining vertical space */
+  overflow-y: auto; /* Allows scrolling for the content */
+  padding: 14px; /* Padding for inner content */
+  background-color: #fff; /* Example background color */
+}
