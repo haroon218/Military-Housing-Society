@@ -1,0 +1,250 @@
+<div class="container">
+  <p-breadcrumb class="max-w-full">
+    <ng-template pTemplate="item" let-item>
+      <ng-container *ngIf="item.route; else elseBlock">
+        <a [routerLink]="item.route" class="p-menuitem-link">
+          <span [ngClass]="[item.icon ? item.icon : '', 'text-color']"></span>
+          <span class="text-primary font-semibold">{{
+            item.label | translate
+          }}</span>
+        </a>
+      </ng-container>
+      <ng-template #elseBlock>
+        <a [href]="item.url">
+          <span class="text-color">{{ item.label | translate }}</span>
+        </a>
+      </ng-template>
+    </ng-template>
+  </p-breadcrumb>
+
+  <h2
+    style="color: #6d428f; font-size: 16px; line-height: 24px; font-weight: 600"
+  >
+    Cities List
+  </h2>
+
+  <div>
+    <h6>{{ "COMPANIES_LIST.SEARCH_LABEL" | translate }}</h6>
+    <div class="search-container">
+      <div class="search-input">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="search by Region name" />
+      </div>
+      <button class="btn btn-outline-secondary">
+        {{ "COMPANIES_LIST.SEARCH" | translate }}
+      </button>
+      <p-dropdown
+      [options]="countries"
+      optionLabel="name"
+       (onChange)="onRegionIdChange($event)"
+      placeholder="Select Area"
+      optionValue="id"
+      formControlName="region_id"
+      class="ml-2"
+      class="custom-dropdown"
+  ></p-dropdown>
+      <button
+        class="btn btn-add-company"
+        type="button"
+        (click)="openAddRegionDialog()"
+      >
+        Add city
+      </button>
+    </div>
+  </div>
+  <div class="card">
+    <p-table
+      #dt1
+      [value]="customers"
+      dataKey="id"
+      [rows]="perPage"
+      [rowsPerPageOptions]="[10, 25, 50]"
+      [loading]="loading"
+      [paginator]="true"
+      [totalRecords]="totalRecords"
+      [globalFilterFields]="['representative.name']"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="min-width: 15rem">
+            <div class="flex align-items-center">Id</div>
+          </th>
+          <th style="min-width: 15rem">
+            <div class="flex align-items-center">City name</div>
+          </th>
+          <th style="min-width: 15rem">
+            <div class="flex align-items-center">Area Name</div>
+          </th>
+          <th style="min-width: 10rem">
+            <div class="flex align-items-center">Created at</div>
+          </th>
+          <th style="min-width: 10rem">
+            <div class="flex align-items-center">Actions</div>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-customer>
+        <tr>
+          <td>
+            <span class="ml-1 vertical-align-middle">{{ customer.id }}</span>
+          </td>
+          <td>
+            <span class="ml-1 vertical-align-middle">{{ customer.name }}</span>
+          </td>
+          <td>
+            <span class="ml-1 vertical-align-middle">{{ customer.area_name }}</span>
+          </td>
+          <td>{{ customer.created_at | date : "MM/dd/yyyy" }}</td>
+
+          <td>
+            <div class="flex-container">
+              <img
+              src="/assets/view-icon.svg"
+              alt="{{ 'COMPANIES_LIST.VIEW_ALT' | translate }}"
+              class="icon"
+              (click)="openEditDialog(customer)"
+            />
+              <img (click)="onDelete(customer.id,customer.name)"
+                src="/assets/delete.svg"
+                alt="{{ 'COMPANIES_LIST.GIFT_ALT' | translate }}"
+                class="icon"
+              />
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6">
+            <div
+              style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                flex-direction: column;
+              "
+            >
+              <img src="/assets/no-data.svg" alt="" />
+              <div>No City Added Yet</div>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  <p-dialog
+  [(visible)]="displayAddCountryDialog"
+  [modal]="true"
+  [header]="isEditMode ? 'Edit City' : 'Add city'"
+  [closable]="true"
+  [style]="{ width: '30vw' }"
+>
+  <form [formGroup]="addRegionForm" class="giveaway-form">
+    <div class="form-grid-horizontal">
+      <div class="form-field">
+        <label for="regionName">City Name</label>
+        <input
+          type="text"
+          id="regionName"
+          pInputText
+          formControlName="name"
+          placeholder="Enter Country Name"
+        />
+        <div
+          *ngIf="
+            addRegionForm.controls['name'].invalid &&
+            addRegionForm.controls['name'].touched
+          "
+          class="error-message"
+        >
+          City Name is required.
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="regionDropdown">Area</label>
+        <p-dropdown
+          id="regionDropdown"
+          [options]="countries"
+          optionLabel="name"
+          placeholder="Select Area"
+          optionValue="id"
+          formControlName="area_id"
+          class="custom-dropdown"
+        ></p-dropdown>
+      </div>
+    </div>
+
+    <div class="button-row">
+      <button
+        pButton
+        label="Cancel"
+        class="p-button-outlined"
+        (click)="closeAddRegionDialog()"
+      ></button>
+      <button
+        pButton
+        class="p-button-raised"
+        [disabled]="isLoading"
+        (click)="onAddOrUpdateRegion()"
+      >
+        <ng-container *ngIf="isLoading; else buttonLabel">
+          <span class="loading-text">{{ loadingText }}</span>
+          <div class="loading-dots">
+            <span class="dot" *ngFor="let dot of [1,2,3]; let i = index" [ngClass]="{'animate': isLoading}"></span>
+          </div>
+        </ng-container>
+        <ng-template #buttonLabel>
+          {{ isEditMode ? 'Update City' : 'Add City' }}
+        </ng-template>
+      </button>
+    </div>
+    
+
+    <!-- Loading animation -->
+    
+  </form>
+</p-dialog>
+<p-dialog
+[(visible)]="delete"
+[modal]="true"
+[header]="'Delete City'"
+[closable]="true"
+[style]="{ width: '30vw' }"
+>
+<div class="giveaway-form">
+  <p>Are you sure you want to delete <strong>{{ CountryNameToDelete }}</strong>?</p>
+
+  <div class="button-row">
+    <button
+      pButton
+      label="Cancel"
+      class="p-button-outlined"
+      (click)="onDeleteCancel()"
+      [disabled]="isLoading"
+    ></button>
+
+    <button
+      pButton
+      class="p-button-raised"
+      [disabled]="isLoading"
+      (click)="confirmDelete()"
+    >
+      <ng-container *ngIf="isLoading; else deletebuttonLabel">
+        <span class="loading-text">{{ loadingText }}</span>
+        <div class="loading-dots">
+          <span class="dot" *ngFor="let dot of [1,2,3]; let i = index" [ngClass]="{'animate': isLoading}"></span>
+        </div>
+      </ng-container>
+      <ng-template #deletebuttonLabel>
+        {{isLoading ? loadingText : 'Delete' }}
+      </ng-template>
+    </button>
+  </div>
+
+  <!-- Loading animation -->
+  
+</div>
+</p-dialog>
+</div>

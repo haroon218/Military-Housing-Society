@@ -1,0 +1,23 @@
+.container {
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.p-button-primary {
+  background-color: #6d428f;
+  padding: 8px 26.5px;
+  border-radius: 4px; /* Replace with your preferred color */
+}
+
+.p-button-secondary {
+  color: #333;
+  padding: 8px;
+  border: 4px !important;
+  border: 1px solid #ccc;
+  background-color: #f0f0f0;
+}
