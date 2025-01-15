@@ -1,33 +1,13 @@
-body {
-  background-color: #f5f5f5;
-}
 
-.card {
-  border-radius: 8px;
+.custom-green {
+  background-color: #396F3C; /* Green color */
+  color: white; /* Text color */
 }
-
-.form-label {
-  font-size: 14px;
+.h-custom {
+  height: calc(100% - 73px);
 }
-
-.btn-primary {
-  background-color: #6f42c1;
-  border-color: #6f42c1;
-}
-
-.btn-primary:hover {
-  background-color: #5b36a3;
-  border-color: #5b36a3;
-}
-
-.position-absolute {
-  cursor: pointer;
-}
-
-.text-center a {
-  color: #6f42c1;
-}
-
-.text-center a:hover {
-  color: #5b36a3;
+@media (max-width: 450px) {
+  .h-custom {
+    height: 100%;
+  }
 }

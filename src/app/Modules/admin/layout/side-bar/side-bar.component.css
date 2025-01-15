@@ -16,7 +16,7 @@ html {
   width: 268px; /* Fixed width for the sidebar */
   background-color: #f3f4f6; /* Light gray background */
   height: 100vh; /* Full viewport height */
-  padding: 24px 15px 0px 15px;
+  padding: 2px 15px 0px 15px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -25,13 +25,14 @@ html {
 .sidebar-header {
   display: flex;
   align-items: center;
-  height: 36px;
+  height: 120px;
+  width: 100%;
   margin-bottom: 20px;
 }
 
 .sidebar-logo {
-  width: 40px; /* Size of the logo */
-  height: 40px;
+  width: 100%; /* Size of the logo */
+  height: 100%;
   margin-right: 10px;
 }
 

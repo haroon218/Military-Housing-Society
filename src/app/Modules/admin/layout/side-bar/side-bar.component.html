@@ -1,7 +1,7 @@
 <div class="sidebar" >
   <div class="sidebar-header">
-    <img src="/assets/Logo.png" alt="Logo" class="sidebar-logo">
-    <h2 class="sidebar-title">ReportEase</h2>
+    <img src="/assets/military.jpeg" alt="Logo" class="sidebar-logo">
+    <!-- <h2 class="sidebar-title">ReportEase</h2> -->
   </div>
 
   <div class="sidebar-menu">
@@ -10,10 +10,10 @@
       <span class="d-none d-md-inline">{{ 'SIDEBAR.DASHBOARD' | translate }}</span>
     </div>
 
-    <div class="menu-item" routerLink="reports" routerLinkActive="active-link">
+    <!-- <div class="menu-item" routerLink="reports" routerLinkActive="active-link">
       <img src="/assets/Reports.svg" alt="Reports Icon" width="16" height="16">
       <span class="d-none d-md-inline">{{ 'SIDEBAR.REPORTS' | translate }}</span>
-    </div>
+    </div> -->
 
     <!-- Users Management Section -->
     <!-- <div class="submenu-container" style="background-color: #ffffff; margin-bottom: 16px; border-radius: 7px;">
@@ -68,12 +68,12 @@
         </p-accordionTab>
       </p-accordion>
     </div> -->
-    <div class="menu-item" routerLink="feedback/feed-back" routerLinkActive="active-link">
+    <!-- <div class="menu-item" routerLink="feedback/feed-back" routerLinkActive="active-link">
       <img src="/assets/Leading-Icon.svg" alt="Dashboard Icon" width="16" height="16">
       <span class="d-none d-md-inline">Feedback center</span>
-    </div>
+    </div> -->
     <!-- Rewards & Offers Center Section -->
-    <div class="submenu-container" style="background-color: #ffffff; margin-bottom: 16px;  border-radius: 7px;">
+    <!-- <div class="submenu-container" style="background-color: #ffffff; margin-bottom: 16px;  border-radius: 7px;">
       <p-accordion [activeIndex]="activeTab === 'rewards' ? 0 : -1">
         <p-accordionTab (click)="setActiveTab('rewards')">
           <ng-template pTemplate="header">
@@ -115,25 +115,25 @@
           </div>
           <div (click)="$event.stopPropagation()" class="submenu-item" routerLink="loctions/cities">
             Cities
-          </div>
+          </div> -->
           <!-- <div (click)="$event.stopPropagation()" class="submenu-item" routerLink="user-management/customer-list">
             {{ 'SIDEBAR.CUSTOMERS_LIST' | translate }}
           </div> -->
-        </p-accordionTab>
+        <!-- </p-accordionTab>
       </p-accordion>
-    </div>
+    </div> -->
    
     <!-- <div class="menu-item" routerLink="regions" routerLinkActive="active-link" routerLink="user-management/customer-list">
       <img src="/assets/Reports.svg" alt="Reports Icon" width="16" height="16">
       <span class="d-none d-md-inline">Customers</span>
     </div> -->
-    <div class="menu-item" routerLink="regions" routerLinkActive="active-link" routerLink="categories/categories">
+    <!-- <div class="menu-item" routerLink="regions" routerLinkActive="active-link" routerLink="categories/categories">
       <img src="/assets/Reports.svg" alt="Reports Icon" width="16" height="16">
       <span class="d-none d-md-inline">Categories</span>
     </div>
     <div class="menu-item" routerLink="regions" routerLinkActive="active-link" routerLink="roles/role">
       <img src="/assets/Reports.svg" alt="Reports Icon" width="16" height="16">
       <span class="d-none d-md-inline">Roles</span>
-    </div>
+    </div> -->
   </div>
 </div>
