@@ -31,33 +31,33 @@ export class LoginComponent {
   }
 
   onLogin(): void {
-    
+    // if (this.loginForm.invalid) {
+    //   this.toastr.warning('Please fill all required fields correctly.', 'Form Validation');
+    //   return;
+    // }
 
-    this.isLoading = true;
-    this.toastr.success('Logged in successfully', 'Success');
-    this.router.navigate(['/admin']);
-    this.isLoading = true;
-    // Redirect to the admin page
-    //       this.router.navigate(['/admin']); // Redirect to the admin page // Show the loader
-    // this.authService.login(this.loginForm.value).subscribe({
-    //   next: (response) => {
-    //     const token = response.data?.token; // Assuming the token is inside response.data
-    //     if (token) {
-    //       localStorage.setItem('token', token);
-    //       localStorage.setItem('role', response.data.user.role); // Store the token in localStorage
-    //       this.toastr.success('Logged in successfully', 'Success');
-    //       this.router.navigate(['/admin']); // Redirect to the admin page
-    //     } else {
-    //       this.toastr.error('Token not found in the response', 'Login Failed');
-    //     }
-    //   },
-    //   error: (error) => {
-    //     this.isLoading = false;
-    //     this.toastr.error('Login failed. Please try again later.', 'Error');
-    //   },
-    //   complete: () => {
-    //     this.isLoading = false; // Hide the loader
-    //   },
-    // });
+    this.isLoading = true; // Show the loader
+  //   this.authService.login(this.loginForm.value).subscribe({
+  //     next: (response) => {
+  //       const token = response.data?.token; // Assuming the token is inside response.data
+  //       if (token) {
+  //         localStorage.setItem('token', token);
+  //         localStorage.setItem('role', response.data.user.role); // Store the token in localStorage
+  //         this.toastr.success('Logged in successfully', 'Success');
+  //         this.router.navigate(['/admin']); // Redirect to the admin page
+  //       } else {
+  //         this.toastr.error('Token not found in the response', 'Login Failed');
+  //       }
+  //     },
+  //     error: (error) => {
+  //       this.isLoading = false;
+  //       this.toastr.error('Login failed. Please try again later.', 'Error');
+  //     },
+  //     complete: () => {
+  //       this.isLoading = false; // Hide the loader
+  //     },
+  //   });
+  // }
+  this.router.navigate(['/admin']); // Redirect to the admin page
   }
 }
