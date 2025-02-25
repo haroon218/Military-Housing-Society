@@ -1,14 +1,1 @@
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
-body {
-  background-color: yellow; /* This should be visible if style.css is being applied */
-}
-:host {
-  --primary-color: #6d428f;
-}
-html[dir="rtl"] body {
-  direction: rtl;
-}
+/* You can add global styles to this file, and also import other style files */
