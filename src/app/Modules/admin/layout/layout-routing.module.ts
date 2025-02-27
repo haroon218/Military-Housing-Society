@@ -23,6 +23,8 @@ const routes: Routes = [
       loadChildren: () => import('../billing/billing.module').then(m => m.BillingModule)
   },
     ],
+
+    
 },];
 
 @NgModule({
