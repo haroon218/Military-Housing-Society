@@ -1,0 +1,413 @@
+<!-- <div class="electricity-bill">
+  <div class="header">
+    <h2>{{ customerName }}</h2>
+    <p>{{ customerAddress }}</p>
+    <p>Customer ID: {{ customerId }}</p>
+    <p>Reference No: {{ referenceNo }}</p>
+  </div>
+  <div class="billing-details">
+    <h3>BILLING DETAILS FOR SERVICES</h3>
+    <p>WATER | SEVERAGE | SECURITY | MAINTENANCE</p>
+    <p>BILLING MONTH: {{ billingMonth }}</p>
+    <p>DEFERRED: {{ deferredAmount }}</p>
+    <p>ARREARS: {{ arrears }}</p>
+    <p>CURRENT BILL: {{ currentBill }}</p>
+    <p>PENDING AMOUNT: {{ pendingAmount }}</p>
+    <p>DUE DATE: {{ dueDate }}</p>
+    <p>PAYABLE BILL ON DUE DATE: {{ payableOnDueDate }}</p>
+    <p>PAYABLE BILL AFTER DUE DATE: {{ payableAfterDueDate }}</p>
+  </div>
+  <div class="billing-history">
+    <h3>BILLING HISTORY</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>MONTH</th>
+          <th>BILL</th>
+          <th>RECEIPT ID</th>
+          <th>PAID DATE</th>
+          <th>PAYMENT</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let history of billingHistory">
+          <td>{{ history.month }}</td>
+          <td>{{ history.bill }}</td>
+          <td>{{ history.receiptId }}</td>
+          <td>{{ history.paidDate }}</td>
+          <td>{{ history.payment }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="contact-info">
+    <h3>FOR SUPPLY FAILURE CONTACT</h3>
+    <p>COMPLAINT OFFICE: {{ complaintOffice }}</p>
+    <p>ONLINE ASKARI BANK ACCOUNT IBAN: {{ onlineBankAccount }}</p>
+    <p>After Payment Send it To: {{ billingEmail }}</p>
+  </div>
+  <div class="bank-copy">
+    <h3>BANK COPY</h3>
+    <p>MILITARY ACCOUNTS COPRATIVE HOUSING SOCIETY - BILLING</p>
+    <p>REFERENCE NO: {{ referenceNo }}</p>
+    <p>BILLING MONTH: {{ billingMonth }}</p>
+    <p>CUSTOMER ID: {{ customerId }}</p>
+    <p>DUE DATE: {{ dueDate }}</p>
+    <p>TOTAL PAYABLE: {{ payableOnDueDate }}</p>
+    <p>AFTER DUE DATE: {{ payableAfterDueDate }}</p>
+  </div>
+</div> -->
+
+
+
+  
+ <div *ngIf="showPrintView" >
+  <div #invoiceCont>
+  <div class="header">
+   <div class="row">
+    <div class="col-8">
+     <h5>
+      MILITARY ACCOUNTS CO-OPERATIVE HOUSING SOCIETY
+     </h5>
+     <p>
+      AGHA KAMRAN
+      <br/>
+      24, MACHIS A, A BLOCK, MILITARY ACCOUNTS
+     </p>
+    </div>
+    <div class="col-4 text-end">
+     <img alt="QR code for billing details" height="100" src="https://storage.googleapis.com/a1aa/image/nQzsYRdOQkCv90zQJWTpzngsptCdi-i5uB1Vav9wwvc.jpg" width="100"/>
+    </div>
+   </div>
+  </div>
+  <div class="billing-details">
+   <h6>
+    BILLING DETAILS FOR SERVICES
+   </h6>
+   <table>
+    <thead>
+     <tr>
+      <th>
+       WATER
+      </th>
+      <th>
+       SEWERAGE
+      </th>
+      <th>
+       SECURITY
+      </th>
+      <th>
+       MAINTENANCE
+      </th>
+     </tr>
+    </thead>
+    <tbody>
+     <tr>
+      <td>
+       200
+      </td>
+      <td>
+       50
+      </td>
+      <td>
+       50
+      </td>
+      <td>
+       50
+      </td>
+     </tr>
+     <tr>
+      <td class="due-date" colspan="4">
+       DUE DATE: 10/12/2025
+      </td>
+     </tr>
+     <tr>
+      <td class="payable-bill" colspan="4">
+       PAYABLE BILL ON DUE DATE: 3450.00
+      </td>
+     </tr>
+     <tr>
+      <td class="payable-bill-after" colspan="4">
+       PAYABLE BILL AFTER DUE DATE: 3900.00
+      </td>
+     </tr>
+    </tbody>
+   </table>
+  </div>
+  <div style="display: flex;justify-content: space-between;">
+  <div class="billing-history">
+   <h6>
+    BILLING HISTORY
+   </h6>
+   <table>
+    <thead>
+     <tr>
+      <th>
+       MONTH
+      </th>
+      <th>
+       BILL RECEIPT DATE
+      </th>
+      <th>
+       PAYMENT DATE
+      </th>
+      <th>
+       PAYMENT
+      </th>
+     </tr>
+    </thead>
+    <tbody>
+     <tr>
+      <td>
+       NOVEMBER
+      </td>
+      <td>
+       10/11/2024
+      </td>
+      <td>
+       10/11/2024
+      </td>
+      <td>
+       PAID
+      </td>
+     </tr>
+     <tr>
+      <td>
+       OCTOBER
+      </td>
+      <td>
+       10/10/2024
+      </td>
+      <td>
+       10/10/2024
+      </td>
+      <td>
+       PAID
+      </td>
+     </tr>
+     <tr>
+      <td>
+       SEPTEMBER
+      </td>
+      <td>
+       10/09/2024
+      </td>
+      <td>
+       10/09/2024
+      </td>
+      <td>
+       PAID
+      </td>
+     </tr>
+     <tr>
+      <td>
+       AUGUST
+      </td>
+      <td>
+       10/08/2024
+      </td>
+      <td>
+       10/08/2024
+      </td>
+      <td>
+       PAID
+      </td>
+     </tr>
+     <tr>
+      <td>
+       JULY
+      </td>
+      <td>
+       10/07/2024
+      </td>
+      <td>
+       10/07/2024
+      </td>
+      <td>
+       PAID
+      </td>
+     </tr>
+     <tr>
+      <td>
+       JUNE
+      </td>
+      <td>
+       10/06/2024
+      </td>
+      <td>
+       10/06/2024
+      </td>
+      <td>
+       PAID
+      </td>
+     </tr>
+     <tr>
+      <td>
+       MAY
+      </td>
+      <td>
+       10/05/2024
+      </td>
+      <td>
+       10/05/2024
+      </td>
+      <td>
+       PAID
+      </td>
+     </tr>
+     <tr>
+      <td>
+       APRIL
+      </td>
+      <td>
+       10/04/2024
+      </td>
+      <td>
+       10/04/2024
+      </td>
+      <td>
+       PAID
+      </td>
+     </tr>
+     <tr>
+      <td>
+       MARCH
+      </td>
+      <td>
+       10/03/2024
+      </td>
+      <td>
+       10/03/2024
+      </td>
+      <td>
+       PAID
+      </td>
+     </tr>
+     <tr>
+      <td>
+       FEBRUARY
+      </td>
+      <td>
+       10/02/2024
+      </td>
+      <td>
+       10/02/2024
+      </td>
+      <td>
+       PAID
+      </td>
+     </tr>
+     <tr>
+      <td>
+       JANUARY
+      </td>
+      <td>
+       10/01/2024
+      </td>
+      <td>
+       10/01/2024
+      </td>
+      <td>
+       PAID
+      </td>
+     </tr>
+    </tbody>
+   </table>
+  </div>
+  <div class="complaint-office">
+   <h6>
+    COMPLAINT OFFICE
+   </h6>
+   <p class="contact-info">
+    FOR SUPPLY FAILURE CONTACT OFFICE: 042 35959766
+   </p>
+   <p class="note">
+    نوٹ: براہ کرم بل کی ادائیگی کے بعد رسید سنبھال کر رکھیں۔
+   </p>
+  </div>
+</div>
+  <div class="bank-details">
+   <h6>
+    ONLINE ASKARI BANK ACCOUNT IBAN
+   </h6>
+   <p>
+    PK50ASCM000321605001200
+   </p>
+   <p>
+    After Payment Send It To billingmilitaryaccounts.com
+   </p>
+  </div>
+  <div class="footer">
+   <div class="row">
+    <div class="col-8">
+     <p>
+      BANK COPY
+     </p>
+     <p>
+      MILITARY ACCOUNTS CO-OPERATIVE HOUSING SOCIETY - BILLING
+     </p>
+     <p>
+      REFERENCE NO: MACHIS2025
+     </p>
+     <p>
+      DECEMBER 2025
+     </p>
+     <p>
+      CUSTOMER ID: MC01-220222-276
+     </p>
+     <p>
+      AGHA KAMRAN
+     </p>
+     <p>
+      24, MACHIS A, A BLOCK
+     </p>
+     <p>
+      DUE DATE: 10/12/2025
+     </p>
+     <p>
+      AMOUNT: Rs. 3450.00
+     </p>
+    </div>
+    <div class="col-4 qr-code">
+     <img alt="QR code for bank copy" height="100" src="https://storage.googleapis.com/a1aa/image/i3c-ctukczCC09KdllTptnIm2_W49gq4Ge62yIlW-4w.jpg" width="100"/>
+    </div>
+   </div>
+  </div>
+  <div class="footer">
+   <div class="row">
+    <div class="col-8">
+     <p>
+      MACHIS COPY
+     </p>
+     <p>
+      MILITARY ACCOUNTS CO-OPERATIVE HOUSING SOCIETY - BILLING
+     </p>
+     <p>
+      REFERENCE NO: MACHIS2025
+     </p>
+     <p>
+      DECEMBER 2025
+     </p>
+     <p>
+      CUSTOMER ID: MC01-220222-276
+     </p>
+     <p>
+      AGHA KAMRAN
+     </p>
+     <p>
+      24, MACHIS A, A BLOCK
+     </p>
+     <p>
+      DUE DATE: 10/12/2025
+     </p>
+     <p>
+      AMOUNT: Rs. 3450.00
+     </p>
+    </div>
+    <div class="col-4 qr-code">
+     <img alt="QR code for machis copy" height="100" src="https://storage.googleapis.com/a1aa/image/UeuIMlz878QHTORxe4XVjX0uzhM3FdOPQkDawxk9N3A.jpg" width="100"/>
+    </div>
+   </div>
+  </div>
+</div>
+</div>

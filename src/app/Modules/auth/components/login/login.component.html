@@ -1,0 +1,53 @@
+  <!-- <app-floating-configurator /> -->
+  <div class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-[100vw] overflow-hidden">
+    <div class="flex flex-col items-center justify-center">
+        <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
+            <div class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20" style="border-radius: 53px">
+                <div class="text-center mb-8">
+                    <!-- Centering the image -->
+                    <div class="flex justify-center mb-4">
+                        <img src="/assets/images/logo.jpeg" alt="Logo" loading="lazy" style="max-height: 100px;">
+                    </div>
+                    <h1 class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Welcome to MACHS!</h1>
+                    <p class="text-muted-color font-medium">Login in to continue</p>
+                </div>
+               
+                <div>
+                    <form [formGroup]="loginForm" (submit)="userLogin()">
+                        <div class="flex" style="flex-direction: column;">
+                            <label for="email" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Email</label>
+                            <input pInputText id="email" type="email" formControlName="email" placeholder="Enter Email" class="w-full md:w-[30rem] mb-1" />
+                            @if (loginForm.get('email')?.touched && loginForm.get('email')?.hasError('required')) {
+                                <small style="color: red;"> Email is required </small>
+                            }
+                            @if (loginForm.get('email')?.touched && loginForm.get('email')?.hasError('email')) {
+                                <small style="color: red;"> Email is Invalid </small>
+                            }
+                        </div>
+                        <div class="flex mt-2" style="flex-direction: column;">
+                            <label for="pass" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Password</label>
+                            <p-password id="pass" formControlName="password" placeholder="Enter Password" [toggleMask]="true" styleClass="mb-1" [fluid]="true" [feedback]="false"></p-password>
+                            @if (loginForm.get('pass')?.touched && loginForm.get('pass')?.hasError('required')) {
+                                <small style="color: red;"> Password is required </small>
+                            }
+                        </div>
+                        <div class="flex items-center justify-between mt-2 mb-3">
+                            <div class="flex items-center">
+                                <p-checkbox id="rem" binary class="mr-2" formControlName="remember"></p-checkbox>
+                                <label for="rem">Remember me</label>
+                            </div>
+                            <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</span>
+                        </div>
+                        <p-button
+                        type="submit"
+                        [disabled]="loading"
+                        [label]="loading ? '' : 'Login'"
+                        [loading]="loading"
+                        styleClass="custom-login-button">
+                      </p-button>
+                              </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
