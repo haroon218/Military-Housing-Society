@@ -85,7 +85,8 @@ export class TherapistDetailComponent {
       console.error('No invoice content to print');
       return;
     }
-
+ 
+    
     // Create a new window for printing
     const popupWindow = window.open('','_blank', 'width=700,height=600');
 
