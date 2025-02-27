@@ -55,6 +55,9 @@ interface ExportColumn {
 })
 export class HouseOwnersComponent {
   
+
+
+  
     productDialog: boolean = false;
   
     products = signal<any[]>([]);
