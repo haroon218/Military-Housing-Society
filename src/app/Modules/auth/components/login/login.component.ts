@@ -52,40 +52,38 @@ export class LoginComponent {
     });
   }
   userLogin() {
-    
-    if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched();
-      return;
-    }
+    this.router.navigate(['/admin'])
+    // if (this.loginForm.invalid) {
+    //   this.loginForm.markAllAsTouched();
+    //   return;
+    // }
   
-    this.loading = true;
-    this.authService.Login(this.loginForm.value).subscribe({
-      next: (response: any) => {
-        this.loading = false;
-        if (response?.Success) {
-          localStorage.setItem('Data@Salvao', JSON.stringify(response.Data));
+    // this.loading = true;
+    // this.authService.Login(this.loginForm.value).subscribe({
+    //   next: (response: any) => {
+    //     this.loading = false;
+    //     if (response?.Success) {
+    //       localStorage.setItem('Data@Salvao', JSON.stringify(response.Data));
+    //                 this.sharedservice.sharedData.next(response.Data); 
           
-          // **Update BehaviorSubject with new user data**
-          this.sharedservice.sharedData.next(response.Data); 
-          
-          this.router.navigate(['/admin']);
-          this.toastService.showToast({
-            type: 'success',
-            shortMessage: 'Success!',
-            detail: response.Message
-          });
-        } else {
-          this.toastService.showToast({
-            type: 'error',
-            shortMessage: 'Error!',
-            detail: response.Message
-          });
-        }
-      },
-      error: (error) => {
-        this.loading = false;
-      }
-    });
+         
+    //       this.toastService.showToast({
+    //         type: 'success',
+    //         shortMessage: 'Success!',
+    //         detail: response.Message
+    //       });
+    //     } else {
+    //       this.toastService.showToast({
+    //         type: 'error',
+    //         shortMessage: 'Error!',
+    //         detail: response.Message
+    //       });
+    //     }
+    //   },
+    //   error: (error) => {
+    //     this.loading = false;
+    //   }
+    // });
   }
   
   
