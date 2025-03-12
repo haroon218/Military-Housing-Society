@@ -80,7 +80,7 @@ export class RolesComponent {
 
   constructor(){}
   ngOnInit(): void {
-    this.getAllRoles()
+    // this.getAllRoles()
   }
   getAllRoles(){
     this.loading=true;

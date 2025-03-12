@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppLayout } from './component/app.layout';
 import { DashboardComponent } from '../dashboard/dashboard/dashboard.component';
+import { BlockComponent } from '../block/block.component';
+import { AreaComponent } from '../area/area.component';
+import { PlotsComponent } from '../plots/plots.component';
 
 const routes: Routes = [
  {
@@ -13,7 +16,7 @@ const routes: Routes = [
         { 
           path: 'user',
           loadChildren: () => import('../users/users.module').then(m => m.UsersModule)
-      },
+       },
       { 
         path: 'auth',
         loadChildren: () => import('../roles-permission/roles-permission.module').then(m => m.RolesPermissionModule)
@@ -22,6 +25,10 @@ const routes: Routes = [
       path: 'bills',
       loadChildren: () => import('../billing/billing.module').then(m => m.BillingModule)
   },
+  {path:'block',component:BlockComponent},
+  {path:'area',component:AreaComponent},
+  {path:'plot',component:PlotsComponent}
+
     ],
 
     
