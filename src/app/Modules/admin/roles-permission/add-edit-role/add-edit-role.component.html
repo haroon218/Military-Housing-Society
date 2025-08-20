@@ -1,0 +1,79 @@
+<p-toolbar styleClass="mb-6">
+  <ng-template #start>
+    <div class="flex gap-2" style="align-items: baseline;">
+      <button pButton 
+              icon="pi pi-chevron-left" 
+              class="p-button-sm p-button-secondary" 
+              (click)="goBack()"
+              pTooltip="Go back" 
+              tooltipPosition="bottom"></button>
+      <span class="text-lm text-gray-1000 font-bold">
+        {{this.role_id?'Edit Role':'Add Role'}}
+      </span>
+    </div>
+  </ng-template>
+</p-toolbar>
+
+<form [formGroup]="addRoleForm" class="p-fluid">
+  <!-- Role Name Section -->
+  <div class="mb-4">
+    <label for="name" class="block font-bold mb-2 text-900">Role Name <span class="text-red-500">*</span></label>
+    <input type="text" pInputText id="name" placeholder="e.g. Admin, Editor, Viewer" 
+           formControlName="name" class="w-full" />
+    @if (addRoleForm.get('name')?.touched && addRoleForm.get('name')?.hasError('required')) {
+      <small class="text-red-500">Role name is required</small>
+    }
+  </div>
+
+  <!-- Permissions Section -->
+ <div class="permissions-section" style="background-color: white;padding: 20px;">
+  <h3 class="text-lg font-bold mb-4 flex align-items-center text-800">
+    <i class="pi pi-shield mr-2"></i> Select Permissions <span class="text-red-500">*</span>
+  </h3>
+
+  <!-- Permissions Grid - 4 cards per row -->
+  <div class="permission-grid">
+  @for (permission of permissions; track permission.id) {
+    <div class="permission-card-container">
+      <div class="permission-card surface-card p-3 border-round shadow-1 hover:shadow-2 transition-all transition-duration-200 h-full" 
+        >
+        <div class="flex align-items-center">
+<p-checkbox
+  [binary]="true"
+  [inputId]="'perm-' + permission.id"
+  [value]="permission.id"
+  [ngModel]="isPermissionSelected(permission.id)"
+  [ngModelOptions]="{ standalone: true }"
+  (onChange)="onPermissionToggle(permission.id)"
+  class="mr-2">
+</p-checkbox>
+
+
+
+          <label [for]="'perm-' + permission.id" class="font-medium cursor-pointer flex-grow-1">
+            {{ permission.name }}
+          </label>
+        </div>
+        @if (permission.description) {
+          <small class="block mt-2 text-500">{{ permission.description }}</small>
+        }
+      </div>
+    </div>
+  }
+</div>
+
+
+  @if (addRoleForm.get('permissions')?.touched && addRoleForm.get('permissions')?.hasError('required')) {
+    <small class="text-red-500 block mt-2">At least one permission must be selected</small>
+  }
+</div>
+
+  <!-- Action Buttons -->
+  <div class="flex justify-end gap-2 mt-4">
+    <p-button label="Cancel" icon="pi pi-times" severity="secondary" 
+             (click)="goBack(); addRoleForm.reset()"></p-button>
+    <p-button label="Save" icon="pi pi-check" 
+             [loading]="isLoading" [disabled]="isLoading || addRoleForm.invalid"
+             (click)="addUpdateRole()"></p-button>
+  </div>
+</form>

@@ -28,6 +28,7 @@ export class TherapistDetailComponent {
   @Input() showPrintView = false; // Receive flag from parent
   @Output() closePrint = new EventEmitter<void>(); // Notify parent when done
   @ViewChild('invoiceCont', { static: false }) invoiceCont!: ElementRef;
+@Input() billData: any; // receive the API data
 
   customerName = 'AOSA KAMRAN';
   customerAddress = '241, MACHSA, A BLOCK, MILITARY ACCOUNTS COOPERATIVE HOUSING SOCIETY';
@@ -65,12 +66,14 @@ export class TherapistDetailComponent {
   onlineBankAccount = 'PK50ASCMM003201650001200';
   billingEmail = 'Billing@Militaryaccountschs.Com';
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['showPrintView'] && this.showPrintView) {
+    debugger
+    if (changes['showPrintView'] && this.showPrintView && this.billData) {
       setTimeout(() => { // Ensure DOM is rendered before accessing ViewChild
         this.printFunct();
       }, 0);
     }
   }
+
   printFunct() {
     debugger
 

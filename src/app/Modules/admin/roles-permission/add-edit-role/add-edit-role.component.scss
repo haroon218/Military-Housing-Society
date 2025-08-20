@@ -1,0 +1,22 @@
+.permission-card {
+  border: 1px solid var(--surface-border);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.permission-card:hover {
+  border-color: var(--primary-color);
+}
+.permission-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.permission-card-container {
+  height: 100%;
+}
+.permission-card.border-primary {
+  border: 1px solid var(--primary-color);
+  background-color: rgba(var(--primary-rgb), 0.05);
+}

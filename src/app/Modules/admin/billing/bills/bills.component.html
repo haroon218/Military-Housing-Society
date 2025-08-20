@@ -1,7 +1,8 @@
 <p-toolbar styleClass="mb-6">
     <ng-template #start>
         <p-button label="New" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="openNew()" />
-        <p-button severity="secondary" label="Delete" icon="pi pi-trash" outlined (onClick)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length" />
+        <p-button severity="secondary" label="Delete" icon="pi pi-trash" outlined (onClick)="deleteSelectedProducts()"
+            [disabled]="!selectedProducts || !selectedProducts.length" />
     </ng-template>
 
     <!-- <ng-template #end>
@@ -9,21 +10,11 @@
     </ng-template> -->
 </p-toolbar>
 
-<p-table
-    #dt
-    [value]="products()"
-    [rows]="5"
-    [columns]="cols"
-    [paginator]="true"
+<p-table #dt [value]="bills" [rows]="5" [columns]="cols" [paginator]="true"
     [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
-    [tableStyle]="{ 'min-width': '75rem' }"
-    [(selection)]="selectedProducts"
-    [rowHover]="true"
-    dataKey="id"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-    [showCurrentPageReport]="true"
-    [rowsPerPageOptions]="[10, 20, 30]"
->
+    [tableStyle]="{ 'min-width': '75rem' }" [(selection)]="selectedProducts" [rowHover]="true" dataKey="id"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products" [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 20, 30]">
     <ng-template #caption>
         <div class="flex items-center justify-between">
             <h5 class="m-0">Manage Bills</h5>
@@ -42,7 +33,7 @@
             <th style="min-width: 2rem">Owner Name</th>
             <th pSortableColumn="name" style="min-width:2rem">
                 Block Name
-               
+
             </th>
             <th pSortableColumn="name" style="min-width:2rem">
                 Plot NO
@@ -58,11 +49,15 @@
             </th>
             <th pSortableColumn="name" style="min-width:2rem">
                 Bill Date
-                
+
             </th>
             <th pSortableColumn="name" style="min-width:2rem">
                 Due Date
-                
+
+            </th>
+            <th pSortableColumn="name" style="min-width:2rem">
+                Paid Date
+
             </th>
             <th style="min-width: 2rem">Status</th>
             <!-- <th>Image</th>
@@ -91,107 +86,33 @@
                 <p-tableCheckbox [value]="product" />
             </td> -->
             <td style="min-width: 2rem">{{ product.id }}</td>
-            <td style="min-width: 2rem">{{ product.name }}</td>
+            <td style="min-width: 2rem">{{ product.owner.name }}</td>
 
             <td style="min-width: 2rem">{{ product.block_name }}</td>
             <td>
-            {{ product.plot_no }}
+                {{ product.plot.name }}
             </td>
-            <td>{{ product.bill_area  }}</td>
-            <td>{{ product.due_amount }}</td>
-            <td>{{ product.bill_date  }}</td>
-            <td>{{ product.due_date }}</td>
+            <td>{{ product.bill_area }}</td>
+            <td>{{ product.amount }}</td>
+            <td>{{ product.issueDate | date:'dd/MM/yyyy' }}</td>
+            <td>{{ product.dueDate | date:'dd/MM/yyyy' }}</td>
+            <td>{{ product.paidDate | date:'dd/MM/yyyy' }}</td>
             <td>
-                <p-tag [value]="product.inventoryStatus" [severity]="getSeverity(product.inventoryStatus)" />
+                <p-tag [value]="getStatusLabel(product.status)" [severity]="getSeverity(product.status)" />
             </td>
             <td>
-                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editProduct(product)" />
-                <p-button icon="pi pi-print" severity="danger" [rounded]="true" [outlined]="true" (click)="openPrintView()" />
+                <p-button icon="pi pi-check" label="Mark Paid" severity="success" [disabled]="product.status === 1"
+                    (click)="markPaid(product)">
+                </p-button> <p-button icon="pi pi-print" severity="danger" [rounded]="true" [outlined]="true"
+                    (click)="printBill(product.id)" />
             </td>
         </tr>
     </ng-template>
 </p-table>
 
-<p-dialog [(visible)]="productDialog" [style]="{ width: '450px' }" header="Add User" [modal]="true"
-[draggable]="false">
-    <ng-template #content>
-        <div class="flex flex-col gap-6">
-            <!-- <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.image" class="block m-auto pb-4" *ngIf="product.image" /> -->
-            <div>
-                <label for="name" class="block font-bold mb-3">Name</label>
-                <input type="text" pInputText id="name" placeholder="Enter Name" [(ngModel)]="product.name" required autofocus fluid />
-                <small class="text-red-500" *ngIf="submitted && !product.name">Name is required.</small>
-            </div>
-            <div>
-                <label for="name" class="block font-bold mb-3">Email</label>
-                <input type="text" pInputText id="name" placeholder="Enter Email" [(ngModel)]="product.email" required autofocus fluid />
-                <small class="text-red-500" *ngIf="submitted && !product.name">Name is required.</small>
-            </div>
-            <div>
-            <label for="description" class="block font-bold mb-3">Role</label>
-            <div class="flex items-center">
-               <p-checkbox inputId="ingredient1" name="pizza"value="Cheese" [(ngModel)]="pizza" />
-               <label for="ingredient1" class="ml-2"> Super Admin </label>
-            </div>
-           <div class="flex items-center mt-1">
-            <p-checkbox inputId="ingredient2" name="pizza" value="Mushroom" [(ngModel)]="pizza" />
-            <label for="ingredient2" class="ml-2"> Admin </label>
-           </div>
-          <div class="flex items-center mt-1">
-            <p-checkbox inputId="ingredient3" name="pizza" value="Pepper" [(ngModel)]="pizza" />
-            <label for="ingredient3" class="ml-2"> User </label>
-          </div>
-            </div>
-            <div>
-                <label for="description" class="block font-bold mb-3">Description</label>
-                <textarea id="description" placeholder="Enter Description" pTextarea [(ngModel)]="product.description" required rows="3" cols="20" fluid></textarea>
-            </div>
 
-            <!-- <div>
-                <label for="inventoryStatus" class="block font-bold mb-3">Inventory Status</label>
-                <p-select [(ngModel)]="product.inventoryStatus" inputId="inventoryStatus" [options]="statuses" optionLabel="label" optionValue="label" placeholder="Select a Status" fluid />
-            </div> -->
-
-            <!-- <div>
-                <span class="block font-bold mb-4">Category</span>
-                <div class="grid grid-cols-12 gap-4">
-                    <div class="flex items-center gap-2 col-span-6">
-                        <p-radiobutton id="category1" name="category" value="Accessories" [(ngModel)]="product.category" />
-                        <label for="category1">Accessories</label>
-                    </div>
-                    <div class="flex items-center gap-2 col-span-6">
-                        <p-radiobutton id="category2" name="category" value="Clothing" [(ngModel)]="product.category" />
-                        <label for="category2">Clothing</label>
-                    </div>
-                    <div class="flex items-center gap-2 col-span-6">
-                        <p-radiobutton id="category3" name="category" value="Electronics" [(ngModel)]="product.category" />
-                        <label for="category3">Electronics</label>
-                    </div>
-                    <div class="flex items-center gap-2 col-span-6">
-                        <p-radiobutton id="category4" name="category" value="Fitness" [(ngModel)]="product.category" />
-                        <label for="category4">Fitness</label>
-                    </div>
-                </div>
-            </div> -->
-
-            <!-- <div class="grid grid-cols-12 gap-4">
-                <div class="col-span-6">
-                    <label for="price" class="block font-bold mb-3">Price</label>
-                    <p-inputnumber id="price" [(ngModel)]="product.price" mode="currency" currency="USD" locale="en-US" fluid />
-                </div>
-                <div class="col-span-6">
-                    <label for="quantity" class="block font-bold mb-3">Quantity</label>
-                    <p-inputnumber id="quantity" [(ngModel)]="product.quantity" fluid />
-                </div>
-            </div> -->
-        </div>
-    </ng-template>
-
-    <ng-template #footer>
-        <p-button label="Cancel" icon="pi pi-times" text (click)="hideDialog()" />
-        <p-button label="Save" icon="pi pi-check" (click)="saveProduct()" />
-    </ng-template>
-</p-dialog>
 <div>
-    <app-therapist-detail  [showPrintView]="showPrintView" (closePrint)="closePrintView()" ></app-therapist-detail>
+    <app-therapist-detail *ngIf="showPrintView" [showPrintView]="showPrintView" [billData]="selectedBill"
+        (closePrint)="closePrintView()">
+    </app-therapist-detail>
 </div>

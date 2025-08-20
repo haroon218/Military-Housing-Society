@@ -38,7 +38,6 @@ export interface LoginResponse {
 export class LoginComponent {
   private router=inject(Router);
   private sharedservice=inject(SharedService)
-  private authService=inject(AuthService);
   private fb=inject(FormBuilder);
   private toastService=inject(TrigerToastService)
   loginForm :FormGroup
@@ -52,38 +51,45 @@ export class LoginComponent {
     });
   }
   userLogin() {
-    this.router.navigate(['/admin'])
-    // if (this.loginForm.invalid) {
-    //   this.loginForm.markAllAsTouched();
-    //   return;
-    // }
-  
-    // this.loading = true;
-    // this.authService.Login(this.loginForm.value).subscribe({
-    //   next: (response: any) => {
-    //     this.loading = false;
-    //     if (response?.Success) {
-    //       localStorage.setItem('Data@Salvao', JSON.stringify(response.Data));
-    //                 this.sharedservice.sharedData.next(response.Data); 
-          
+
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
+    }
+
+    this.loading = true;
+    this.sharedservice.sendPostRequest('/Auth/Login',this.loginForm.value).subscribe({
+      next: (response: any) => {
+        debugger
+        this.loading = false;
+        if (response?.success) {
+          localStorage.setItem('Data@Salvao', JSON.stringify(response.data));
+          this.sharedservice.sharedData.next(response.data); 
+          this.router.navigate(['/admin'])
          
-    //       this.toastService.showToast({
-    //         type: 'success',
-    //         shortMessage: 'Success!',
-    //         detail: response.Message
-    //       });
-    //     } else {
-    //       this.toastService.showToast({
-    //         type: 'error',
-    //         shortMessage: 'Error!',
-    //         detail: response.Message
-    //       });
-    //     }
-    //   },
-    //   error: (error) => {
-    //     this.loading = false;
-    //   }
-    // });
+          this.toastService.showToast({
+            type: 'success',
+            shortMessage: 'Success!',
+            detail: response.message
+          });
+        } else {
+          this.toastService.showToast({
+            type: 'error',
+            shortMessage: 'Error!',
+            detail: response.message
+          });
+        }
+      },
+      error: (error) => {
+        debugger
+        this.toastService.showToast({
+          type: 'error',
+          shortMessage: 'Error!',
+          detail: error.error.message
+        });
+        this.loading = false;
+      }
+    });
   }
   
   

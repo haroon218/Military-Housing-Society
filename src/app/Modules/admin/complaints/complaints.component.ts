@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
+import { Component, ElementRef, signal, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
@@ -18,54 +18,43 @@ import { TagModule } from 'primeng/tag';
 import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
-import { TherapistDetailComponent } from "../../users/therapist-detail/therapist-detail.component";
-import { SharedService } from '../../Shared/services/shared.service';
-import { TrigerToastService } from '../../Shared/services/triger-toast.service';
-interface Column {
-  field: string;
-  header: string;
-  customExportHeader?: string;
-}
+import { TherapistDetailComponent } from '../users/therapist-detail/therapist-detail.component';
 
-interface ExportColumn {
-  title: string;
-  dataKey: string;
-}
 @Component({
-  selector: 'app-bills',
+  selector: 'app-complaints',
   imports: [
-    RouterModule,
-    CommonModule,
-    TableModule,
-    FormsModule,
-    ButtonModule,
-    RippleModule,
-    ToastModule,
-    ToolbarModule,
-    RatingModule,
-    InputTextModule,
-    TextareaModule,
-    SelectModule,
-    RadioButtonModule,
-    InputNumberModule,
-    DialogModule,
-    TagModule,
-    InputIconModule,
-    IconFieldModule,
-    // ConfirmDialogModule,
-    CheckboxModule,
-    TherapistDetailComponent
-],
-  templateUrl: './bills.component.html',
-  styleUrl: './bills.component.scss'
+     RouterModule,
+        CommonModule,
+        TableModule,
+        FormsModule,
+        ButtonModule,
+        RippleModule,
+        ToastModule,
+        ToolbarModule,
+        RatingModule,
+        InputTextModule,
+        TextareaModule,
+        SelectModule,
+        RadioButtonModule,
+        InputNumberModule,
+        DialogModule,
+        TagModule,
+        InputIconModule,
+        IconFieldModule,
+        // ConfirmDialogModule,
+        CheckboxModule,
+        TherapistDetailComponent
+  ],
+  templateUrl: './complaints.component.html',
+  styleUrl: './complaints.component.scss'
 })
-export class BillsComponent {
-   view:boolean=false;
+export class ComplaintsComponent {
+
+ view:boolean=false;
    @ViewChild('printContent', { static: false }) printContent!: ElementRef;
-private sharedService=inject(SharedService)
-private toastrService=inject(TrigerToastService)
+
     productDialog: boolean = false;
-  bills:any=[]
+  
     products = signal<any[]>([]);
   
     product!: any;
@@ -79,9 +68,9 @@ private toastrService=inject(TrigerToastService)
   
     @ViewChild('dt') dt!: Table;
   
-    exportColumns!: ExportColumn[];
+    exportColumns!: any[];
   
-    cols!: Column[];
+    cols!: any[];
   
     constructor(
        
@@ -91,10 +80,10 @@ private toastrService=inject(TrigerToastService)
     {
         id: '1000',
         name: 'Rana',
-        block_name: 'Main Boulevard',
-        bill_area: '5 Marla',
+        category: 'Water Leakage',
+        description: 'Water leakage in my bathroom',
         plot_no: 62,
-        inventoryStatus: 'paid',
+        inventoryStatus: 'Unresolved ',
         due_amount:'2000',
         bill_date:'28 feb 2025',
         due_date:'30 feb 2025'
@@ -104,10 +93,10 @@ private toastrService=inject(TrigerToastService)
       {
         id: '1001',
         name: 'Haroon',
-        block_name: 'Main Boulevard',
-       bill_area: '10 Marla',
+        category: 'Electricity Outage',
+         description: 'Outage for 10 hours',
         plot_no: 63,
-        inventoryStatus: 'unpaid',
+        inventoryStatus: 'In Progress ',
         due_amount:'3000',
         bill_date:'28 feb 2025',
         due_date:'30 feb 2025'
@@ -118,10 +107,10 @@ private toastrService=inject(TrigerToastService)
     {
       id: '1002',
       name: 'Ali',
-      block_name: 'Main Boulevard',
-      bill_area: '5 Marla',
+      category: 'Electricity Outage',
+      description: 'Electricity outage for lamost 3 hours ',
       plot_no: 64,
-      inventoryStatus: 'paid',
+      inventoryStatus: 'Resolved ',
       due_amount:'4000',
       bill_date:'28 feb 2025',
       due_date:'30 feb 2025'
@@ -131,10 +120,10 @@ private toastrService=inject(TrigerToastService)
   {
     id: '1003',
     name: 'Ahmad',
-    block_name: 'Main Boulevard',
-    bill_area: '5 Marla',
+    category: 'Security',
+    description: 'I have security issues in My block A',
     plot_no: 65,
-    inventoryStatus: 'unpaid',
+    inventoryStatus: 'In Progress',
     due_amount:'1000',
     bill_date:'28 feb 2025',
 due_date:'30 feb 2025'
@@ -148,83 +137,9 @@ due_date:'30 feb 2025'
     }
   
     ngOnInit() {
-        this.loadBills();
+        this.loadDemoData();
     }
-    loadBills() {
   
-      this.sharedService.sendGetRequest('/Billing/all').subscribe({
-        next:(response :any)=>{    
-          debugger   
-          if(response && response.success){
-           
-            this.bills=response.data;
-          }
-        },
-        error:(error:any)=>{
-          
-        }
-      })
-  }
-getStatusLabel(status: number): string {
-  switch (status) {
-    case 0:
-      return 'Pending';
-    case 1:
-      return 'Paid';
-    case 2:
-      return 'Overdue';
-    default:
-      return 'Unknown';
-  }
-}
-markPaid(bill: any) {
-  this.sharedService.sendPostRequest(`/Billing/mark-paid/${bill.id}`,{}).subscribe({
-    next: (respose:any) => {
-         if(respose &&respose.success){
-              this.toastrService.showToast({
-                type: 'success',
-                shortMessage: 'Success!',
-                detail: respose.message,
-              });
-             this.loadBills()
-            }else{
-              this.toastrService.showToast({
-                type: 'error',
-                shortMessage: 'Error!',
-                detail: respose.message,
-              });
-             
-            }
-    },
-    error: (err) => {
-      
-    }
-  });
-}
-selectedBill:any
-printBill(billId: number) {
-    debugger
-    this.sharedService.sendGetRequest(`/Billing`,[billId]).subscribe({
-      next: (res: any) => {
-        this.selectedBill = res.data; // full bill from API
-        this.showPrintView = true;
-      },
-      error: err => console.error('Error fetching bill:', err)
-    });
-  }
-getSeverity(status: number): any {
-  switch (status) {
-    case 0:
-      return 'warn'; // Pending
-    case 1:
-      return 'success'; // Paid
-    case 2:
-      return 'danger';  // Overdue
-    default:
-      return 'info';
-  }
-}
-
     loadDemoData() {
         this.products.set(this.dataAry);
         this.statuses = [
@@ -332,7 +247,18 @@ getSeverity(status: number): any {
         return id;
     }
   
-
+    getSeverity(status: string) {
+        switch (status) {
+            case 'paid':
+                return 'success';
+            case 'unpaid':
+                return 'warn';
+            case 'OUTOFSTOCK':
+                return 'danger';
+            default:
+                return 'info';
+        }
+    }
     ngAfterViewInit() {
       // Ensure ViewChild is initialized
       setTimeout(() => {
@@ -399,4 +325,5 @@ getSeverity(status: number): any {
   }
   
   
+
 

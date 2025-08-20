@@ -21,6 +21,8 @@ import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { RolePermissionService } from '../service/role-permission.service';
 import { TrigerToastService } from '../../Shared/services/triger-toast.service';
+import { SharedService } from '../../Shared/services/shared.service';
+import { AdminRoutingModule } from "../../admin-routing.module";
 interface Column {
   field: string;
   header: string;
@@ -55,13 +57,15 @@ interface ExportColumn {
     InputIconModule,
     IconFieldModule,
     ConfirmDialogModule,
-    CheckboxModule
+    CheckboxModule,
+    AdminRoutingModule
 ],  templateUrl: './roles.component.html',
   styleUrl: './roles.component.scss',
   providers: [MessageService, ConfirmationService]
 })
 export class RolesComponent {
   private rolesService=inject(RolePermissionService);
+  private sharedService=inject(SharedService)
   private toastrService=inject(TrigerToastService)
   allRoles:Role[]=[];
   loading:boolean=false;
@@ -80,16 +84,14 @@ export class RolesComponent {
 
   constructor(){}
   ngOnInit(): void {
-    // this.getAllRoles()
+    this.getAllRoles()
   }
   getAllRoles(){
     this.loading=true;
-let user:any=localStorage.getItem('user');
-    this.rolesService.getRole().subscribe({
-      next:(respose:any)=>{
-        
-        if(respose&&respose.Success){
-          this.allRoles=respose.Data;
+    this.sharedService.sendGetRequest('/Role').subscribe({
+      next:(respose:any)=>{ 
+        if(respose&&respose.success){
+          this.allRoles=respose.data;
           this.loading=false;
         }else{
           this.loading=false;

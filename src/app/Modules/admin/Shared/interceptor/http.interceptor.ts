@@ -21,12 +21,11 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
       // Handle HTTP errors
+      debugger
       let errorMessage = 'An unknown error occurred!';
-      if (error.error?.Message) {
-        errorMessage = error.error.Message; 
-      } else if (error.status === 401) {
-        errorMessage = 'Unauthorized: Please log in again.';
-      } else if (error.status === 403) {
+      if (error.error?.message) {
+        errorMessage = error.error.message; 
+      }  else if (error.status === 403) {
         errorMessage = 'Forbidden: You do not have permission to access this resource.';
       }  else if (error.status >= 500) {
         errorMessage = 'Server Error: Please try again later.';

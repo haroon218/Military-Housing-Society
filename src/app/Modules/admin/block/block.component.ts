@@ -10,6 +10,9 @@ import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
 import { RolePermissionService } from '../roles-permission/service/role-permission.service';
 import { TrigerToastService } from '../Shared/services/triger-toast.service';
+import { SharedService } from '../Shared/services/shared.service';
+import { SelectModule } from 'primeng/select';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-block',
@@ -22,14 +25,17 @@ import { TrigerToastService } from '../Shared/services/triger-toast.service';
         IconFieldModule,   
         InputTextModule, 
         DialogModule,
-        ReactiveFormsModule
+        SkeletonModule,
+        ReactiveFormsModule,SelectModule
   ],
   templateUrl: './block.component.html',
   styleUrl: './block.component.scss'
 })
 export class BlockComponent {
-
- private permissionService=inject(RolePermissionService);
+  error:any
+  skeletonRows = Array(5).fill(0);
+  totalRecords:any=20
+  private sharedService=inject(SharedService)
   private toastrService=inject(TrigerToastService)
   allPermissions:any=[]
 loading:boolean=false;
@@ -39,25 +45,26 @@ loading:boolean=false;
     is_update:boolean = false;
     updateItemData:any;
     deleteItem:any;
-  
-    
-  
-    addPermissionForm = new FormGroup({
-      name:new FormControl("",[Validators.required])
+    blocks:any=[]
+    blockForm = new FormGroup({
+      name:new FormControl("",[Validators.required]),
+      areaId:new FormControl("",[Validators.required])
     })
-  
+    areaList:any=[]
     constructor(){}
     ngOnInit(): void {
-      // this.getPermissions();
+      this.getBlocks();
+      this.getAreas()
     }
-    getPermissions(){
+    getAreas(){
       this.loading=true;
   
-      this.permissionService.getPermissions().subscribe({
-        next:(respose:any)=>{
+      this.sharedService.sendGetRequest('/Area/getAreas').subscribe({
+        next:(response:any)=>{
           
-          if(respose&&respose.Success){
-            this.allPermissions=respose.Data;
+          if(response &&response.success){
+            debugger
+            this.areaList=response.data;
             this.loading=false;
           }else{
             this.loading=false;
@@ -68,24 +75,42 @@ loading:boolean=false;
         }
       })
     }
-    addPermission(){
-      if (this.addPermissionForm.valid) {
-        this.permissionService.addPermission(this.addPermissionForm.value).subscribe({
+    getBlocks(){
+      this.loading=true;
+  
+      this.sharedService.sendGetRequest('/Blocks/get-blocks').subscribe({
+        next:(response:any)=>{
+          
+          if(response){
+            this.blocks=response.data;
+            this.loading=false;
+          }else{
+            this.loading=false;
+          }
+        },
+        error:(error:any)=>{
+           this.loading=false;
+        }
+      })
+    }
+    addBlock(){
+      if (this.blockForm.valid) {
+        this.sharedService.sendPostRequest('/Blocks/add-block',this.blockForm.value).subscribe({
           next:(respose:any)=>{
             
-            if(respose&&respose.Success){
+            if(respose){
               this.toastrService.showToast({
                 type: 'success',
                 shortMessage: 'Success!',
-                detail: respose.Message,
+                detail: respose.message,
               });
               this.addRoleDialog=false;
-              this.getPermissions();
+              this.getBlocks();
             }else{
               this.toastrService.showToast({
                 type: 'error',
                 shortMessage: 'Error!',
-                detail: respose.Message,
+                detail: respose.message,
               });
               this.addRoleDialog=false;
             }
@@ -95,32 +120,32 @@ loading:boolean=false;
           }
         })
       } else {
-        this.addPermissionForm.markAllAsTouched();
-        this.addPermissionForm.updateValueAndValidity();
+        this.blockForm.markAllAsTouched();
+        this.blockForm.updateValueAndValidity();
       }
     }
   
     updatePermission(){
-      if (this.addPermissionForm.valid) {
-        this.permissionService.updatPermission(this.updateItemData.id,this.addPermissionForm.value).subscribe({
+      if (this.blockForm.valid) {
+        this.sharedService.sendPutRequest('/Blocks/update-block',this.updateItemData.id,this.blockForm.value).subscribe({
           next:(respose:any)=>{
             
-            if(respose&&respose.Success){
+            if(respose){
               this.addRoleDialog=false;
               this.is_update=false;
               this.toastrService.showToast({
                 type: 'success',
                 shortMessage: 'Success!',
-                detail: respose.Message,
+                detail: respose.message,
               });
-              this.getPermissions();
+              this.getBlocks();
             }else{
              this.addRoleDialog=false;
              this.is_update=false
              this.toastrService.showToast({
               type: 'success',
               shortMessage: 'Success!',
-              detail: respose.Message,
+              detail: respose.message,
             });
             }
           },
@@ -129,17 +154,17 @@ loading:boolean=false;
           }
         })
       } else {
-        this.addPermissionForm.markAllAsTouched();
-        this.addPermissionForm.updateValueAndValidity();
+        this.blockForm.markAllAsTouched();
+        this.blockForm.updateValueAndValidity();
       }
     }
      
-    openNew(){this.addRoleDialog = true ; this.addPermissionForm.reset()}
+    openNew(){this.addRoleDialog = true ; this.blockForm.reset()}
     deleteSelectedProducts(){}
     editProduct(data:any){
       this.updateItemData = data;
       this.is_update = true
-      this.addPermissionForm.patchValue(data)
+      this.blockForm.patchValue(data)
       this.addRoleDialog  = true
     }
     deletePermission(data:any){
@@ -152,23 +177,23 @@ loading:boolean=false;
     saveProduct(){}
   
     removeRole(){
-      this.permissionService.deletePermission(this.deleteItem.id).subscribe({
+      this.sharedService.sendDeleteRequest('/Blocks/delete-block',this.deleteItem.id).subscribe({
         next:(respose:any)=>{
           
-          if(respose&&respose.Success){
+          if(respose &&respose.success){
             this.deleteDialog=false;
             this.toastrService.showToast({
               type: 'success',
               shortMessage: 'Success!',
-              detail: respose.Message,
+              detail: respose.message,
             });
-            this.getPermissions();
+            this.getBlocks();
           }else{
            this.deleteDialog=false;
            this.toastrService.showToast({
             type: 'success',
             shortMessage: 'Success!',
-            detail: respose.Message,
+            detail: respose.message,
           });
           }
         },

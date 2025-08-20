@@ -10,6 +10,7 @@ import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
 import { RolePermissionService } from '../service/role-permission.service';
 import { TrigerToastService } from '../../Shared/services/triger-toast.service';
+import { SharedService } from '../../Shared/services/shared.service';
 @Component({
   selector: 'app-permissions',
   imports: [
@@ -28,6 +29,7 @@ import { TrigerToastService } from '../../Shared/services/triger-toast.service';
 })
 export class PermissionsComponent {
   private permissionService=inject(RolePermissionService);
+  private sharedService=inject(SharedService)
   private toastrService=inject(TrigerToastService)
   allPermissions:any=[]
 loading:boolean=false;
@@ -44,18 +46,16 @@ loading:boolean=false;
       name:new FormControl("",[Validators.required])
     })
   
-    constructor(){}
+
     ngOnInit(): void {
       this.getPermissions();
     }
     getPermissions(){
       this.loading=true;
-  
-      this.permissionService.getPermissions().subscribe({
-        next:(respose:any)=>{
-          
-          if(respose&&respose.Success){
-            this.allPermissions=respose.Data;
+      this.sharedService.sendGetRequest('/Permission').subscribe({
+        next:(respose:any)=>{    
+          if(respose&&respose.success){
+            this.allPermissions=respose.data;
             this.loading=false;
           }else{
             this.loading=false;
@@ -68,10 +68,12 @@ loading:boolean=false;
     }
     addPermission(){
       if (this.addPermissionForm.valid) {
-        this.permissionService.addPermission(this.addPermissionForm.value).subscribe({
-          next:(respose:any)=>{
-            
-            if(respose&&respose.Success){
+    const payload={
+      name:this.addPermissionForm.value.name
+    }
+        this.sharedService.sendPostRequest('/Permission',payload).subscribe({
+          next:(respose:any)=>{        
+            if(respose&&respose.success){
               this.toastrService.showToast({
                 type: 'success',
                 shortMessage: 'Success!',

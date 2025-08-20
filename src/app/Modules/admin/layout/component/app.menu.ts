@@ -43,6 +43,11 @@ export class AppMenu {
                         icon: 'pi pi-users',
                         items: [
                             {
+                                label: 'Area',
+                                icon: 'pi pi-globe',
+                                routerLink: ['/admin/area']
+                            },
+                            {
                                 label: 'Block',
                                 icon: 'pi pi-th-large',
                                 routerLink: ['/admin/block']
@@ -52,11 +57,7 @@ export class AppMenu {
                                 icon: 'pi pi-map',
                                 routerLink: ['/admin/plot']
                             },
-                            {
-                                label: 'Area',
-                                icon: 'pi pi-globe',
-                                routerLink: ['/admin/area']
-                            }
+                            
                             
                         ]
                     },
@@ -74,7 +75,7 @@ export class AppMenu {
             {
                 label: 'Complaints',
                 items: [
-                    { label: 'Complaints', icon: 'pi pi-fw pi-comments' }
+                    { label: 'Complaints', icon: 'pi pi-fw pi-comments',routerLink: ['/admin/Complaints'] }
                    
              ]
             },

@@ -10,67 +10,92 @@
     
 </p-toolbar>
  <!-- Role Table -->
-<p-table
- #dt
- [value]="allPermissions"
- [rows]="5"
- [columns]="[]"
- [paginator]="true"
- [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
- [tableStyle]="{ 'min-width': '75rem' }"
- [rowHover]="true"
- dataKey="id"
- currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Permissions"
- [showCurrentPageReport]="true"
- [rowsPerPageOptions]="[5, 10, 20]">
+
+ <!-- Role Table -->
+ <p-table #dt [value]="area" [loading]="loading" [rows]="20" [paginator]="true" [rowHover]="true"
+ [scrollable]="true" scrollHeight="50vh"  [totalRecords]="totalRecords" [lazy]="true"
+ currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Therapists" [showCurrentPageReport]="true"
+ [rowsPerPageOptions]="[20,30,40]" >
  <ng-template #caption>
-     <div class="flex items-center justify-between">
-         <h5 class="m-0">Manage Area</h5>
+     <div class="flex items-center justify-between w-full">
+       <!-- Left Side -->
+       <h5 class="m-0">Manage Areas</h5>
+                 <div class="flex items-center gap-3">
+         
+   
          <p-iconfield>
-             <p-inputicon styleClass="pi pi-search" />
-             <input pInputText type="text"  placeholder="Search..." />
+           <p-inputicon styleClass="pi pi-search" />
+           <input pInputText type="text" placeholder="Search..."  />
          </p-iconfield>
+       </div>
      </div>
+   </ng-template>
+   
+ <ng-template pTemplate="header">
+    <tr>
+        <th style="width: 3rem">#</th>
+        <th style="min-width:16rem">Name</th>
+        <th style="min-width: 12rem">Action</th>
+    </tr>
  </ng-template>
- <ng-template #header>
-     <tr>
-         <th style="width: 3rem">#</th>
-         <th style="min-width:16rem">Name</th>
-         <th style="min-width:16rem">Created at</th>
-         <th style="min-width: 12rem">Action</th>
+ <ng-template pTemplate="body" let-areadata>
+
+     @if(!loading && area.length>0){
+        <tr>
+            <td style="width: 3rem">
+               {{areadata.id}}
+            </td>
+            <td style="min-width: 16rem">{{ areadata.name }}</td>
+            <td>
+                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" 
+                (click)="editProduct(areadata)"/>
+                <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deletePermission(areadata);deleteDialog = true" />
+            </td>
+        </tr>
+     }
+ </ng-template>
+ <ng-template pTemplate="loadingbody">
+     <tr *ngFor="let _ of skeletonRows">
+         <td><p-skeleton></p-skeleton></td>
+         <td><p-skeleton></p-skeleton></td>
+         <td><p-skeleton></p-skeleton></td>
+         
      </tr>
  </ng-template>
- <ng-template #body let-permission>
+ <ng-template pTemplate="emptymessage">
      <tr>
-         <td style="width: 3rem">
-            {{permission.id}}
-         </td>
-         <td style="min-width: 16rem">{{ permission.name }}</td>
-         <td style="min-width: 16rem">{{ permission.create_at | date : 'short' }}</td>         
-         <td>
-             <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" 
-             (click)="editProduct(permission)"/>
-             <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deletePermission(permission);deleteDialog = true" />
+         <td colspan="6">
+             <div style="
+                     margin-top: 20px;
+                     display: flex;
+                     justify-content: center;
+                     align-items: center;
+                     width: 100%;
+                     flex-direction: column;
+                     color: #888;
+                 ">
+                 <i class="pi pi-exclamation-circle" style="font-size: 2rem; color: red;"></i>
+                 <div style="margin-top: 1rem;">{{error?error:'No Records Found'}}
+                 </div>
+             </div>
          </td>
      </tr>
  </ng-template>
 </p-table>
- <!-- Role Table -->
-
  <!-- Add Role Popup  -->
 <p-dialog [(visible)]="addRoleDialog" [style]="{ width: '450px' }" [header]="is_update?'Update Area':'Add Area'" [modal]="true"
  [draggable]="false">
-   <form [formGroup]="addPermissionForm">
+   <form [formGroup]="areaForm">
      <div class="flex flex-col gap-1">
             <label for="name" class="block font-bold mb-1">Name</label>
             <input type="text" pInputText id="name" placeholder="Enter Area" formControlName="name"/>
-            @if (addPermissionForm.get('name')?.touched && addPermissionForm.get('name')?.hasError('required')) {
+            @if (areaForm.get('name')?.touched && areaForm.get('name')?.hasError('required')) {
                 <small class="text-red-500">Area name is required</small>
             }
      </div>
 
      <div class="flex justify-end mt-3 gap-1" *ngIf="addRoleDialog">
-         <p-button label="Cancel" icon="pi pi-times" text (click)="closeDialog();addPermissionForm.reset()" />
+         <p-button label="Cancel" icon="pi pi-times" text (click)="closeDialog();areaForm.reset()" />
          <p-button [label]="is_update?'Update':'Add'" icon="pi pi-check" (click)="is_update ? updatePermission():addPermission()" />
      </div>
 

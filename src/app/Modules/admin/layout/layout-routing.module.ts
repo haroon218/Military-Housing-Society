@@ -5,6 +5,7 @@ import { DashboardComponent } from '../dashboard/dashboard/dashboard.component';
 import { BlockComponent } from '../block/block.component';
 import { AreaComponent } from '../area/area.component';
 import { PlotsComponent } from '../plots/plots.component';
+import { ComplaintsComponent } from '../complaints/complaints.component';
 
 const routes: Routes = [
  {
@@ -13,6 +14,8 @@ const routes: Routes = [
     children: [
         { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
         { path: 'dashboard', component: DashboardComponent },
+        { path: 'Complaints', component: ComplaintsComponent },
+
         { 
           path: 'user',
           loadChildren: () => import('../users/users.module').then(m => m.UsersModule)

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal, ViewChild } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
@@ -17,6 +17,8 @@ import { TagModule } from 'primeng/tag';
 import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
+import { SharedService } from '../../Shared/services/shared.service';
+import { TrigerToastService } from '../../Shared/services/triger-toast.service';
 interface Column {
   field: string;
   header: string;
@@ -48,217 +50,215 @@ interface ExportColumn {
         InputIconModule,
         IconFieldModule,
         // ConfirmDialogModule,
-        CheckboxModule
+        CheckboxModule,
+        ReactiveFormsModule
   ],
   templateUrl: './house-owners.component.html',
   styleUrl: './house-owners.component.scss'
 })
 export class HouseOwnersComponent {
   
-    productDialog: boolean = false;
   
-    products = signal<any[]>([]);
-  
-    product!: any;
-  
-    selectedProducts!: any[] | null;
-  
-    submitted: boolean = false;
-  
-    statuses!: any[];
-    pizza:any
-  
-    @ViewChild('dt') dt!: Table;
-  
+  area:any=[]
     exportColumns!: ExportColumn[];
   
     cols!: Column[];
-  
-    constructor(
-       
-    ) {}
-  
-    dataAry:any = [  
-    {
-        id: '1000',
-        name: 'Rana',
-        block_name: 'Main Boulevard',
-        area: '5 Marla',
-        plot_no: 62,
-       
-    },
-      {
-        id: '1001',
-        name: 'Haroon',
-        block_name: 'Main Boulevard',
-        area: '10 Marla',
-        plot_no: 63,
-       
-    },
-    {
-      id: '1002',
-      name: 'Ali',
-      block_name: 'Main Boulevard',
-      area: '5 Marla',
-      plot_no: 64,
-     
-  },
-  {
-    id: '1003',
-    name: 'Ahmad',
-    block_name: 'Main Boulevard',
-    area: '5 Marla',
-    plot_no: 65,
+  ownerId:any
+   ownerDialog = false;  
+  ownerForm!: FormGroup;
+  areas: any[] = [];
+  blocks: any[] = [];
+  plots: any[] = [];
+loading:boolean=false
+  constructor(
+    private fb: FormBuilder,
+    private sharedService: SharedService,private toastrService:TrigerToastService
+  ) {}
+ owners: any[] = [];
+  ngOnInit() {
+     this.ownerForm = this.fb.group({
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      phoneNumber: ['', Validators.required],
+      areaId: [null, Validators.required],
+      blockId: [null, Validators.required],
+      plotId: [null, Validators.required]
+    });
+this.loadOwners()
+    this.loadAreas();
+
+
+
    
-},
-    ]
-  
-    exportCSV() {
-        this.dt.exportCSV();
-    }
-  
-    ngOnInit() {
-        this.loadDemoData();
-    }
-  
-    loadDemoData() {
-        this.products.set(this.dataAry);
-        this.statuses = [
-            { label: 'INSTOCK', value: 'instock' },
-            { label: 'LOWSTOCK', value: 'lowstock' },
-            { label: 'OUTOFSTOCK', value: 'outofstock' }
-        ];
-  
-        this.cols = [
-            { field: 'code', header: 'Code', customExportHeader: 'Product Code' },
-            { field: 'name', header: 'Name' },
-            { field: 'image', header: 'Image' },
-            { field: 'price', header: 'Price' },
-            { field: 'category', header: 'Category' }
-        ];
-  
-        this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
-    }
-  
-    onGlobalFilter(table: Table, event: Event) {
-        table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
-    }
-  
-    openNew() {
-        this.product = {};
-        this.submitted = false;
-        this.productDialog = true;
-    }
-  
-    editProduct(product: any) {
-        this.product = { ...product };
-        this.productDialog = true;
-    }
-  
-    deleteSelectedProducts() {
-        // this.confirmationService.confirm({
-        //     message: 'Are you sure you want to delete the selected products?',
-        //     header: 'Confirm',
-        //     icon: 'pi pi-exclamation-triangle',
-        //     accept: () => {
-        //         this.products.set(this.products().filter((val) => !this.selectedProducts?.includes(val)));
-        //         this.selectedProducts = null;
-        //         this.messageService.add({
-        //             severity: 'success',
-        //             summary: 'Successful',
-        //             detail: 'Products Deleted',
-        //             life: 3000
-        //         });
-        //     }
-        // });
-    }
-  
-    hideDialog() {
-        this.productDialog = false;
-        this.submitted = false;
-    }
-  
-    deleteProduct(product: any) {
-        // this.confirmationService.confirm({
-        //     message: 'Are you sure you want to delete ' + product.name + '?',
-        //     header: 'Confirm',
-        //     icon: 'pi pi-exclamation-triangle',
-        //     accept: () => {
-        //         this.products.set(this.products().filter((val) => val.id !== product.id));
-        //         this.product = {};
-        //         this.messageService.add({
-        //             severity: 'success',
-        //             summary: 'Successful',
-        //             detail: 'Product Deleted',
-        //             life: 3000
-        //         });
-        //     }
-        // });
-    }
-  
-    findIndexById(id: string): number {
-        let index = -1;
-        for (let i = 0; i < this.products().length; i++) {
-            if (this.products()[i].id === id) {
-                index = i;
-                break;
-            }
-        }
-  
-        return index;
-    }
-  
-    createId(): string {
-        let id = '';
-        var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        for (var i = 0; i < 5; i++) {
-            id += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return id;
-    }
-  
-    getSeverity(status: string) {
-        switch (status) {
-            case 'INSTOCK':
-                return 'success';
-            case 'LOWSTOCK':
-                return 'warn';
-            case 'OUTOFSTOCK':
-                return 'danger';
-            default:
-                return 'info';
-        }
-    }
-  
-    saveProduct() {
-        // this.submitted = true;
-        // let _products = this.products();
-        // if (this.product.name?.trim()) {
-        //     if (this.product.id) {
-        //         _products[this.findIndexById(this.product.id)] = this.product;
-        //         this.products.set([..._products]);
-        //         this.messageService.add({
-        //             severity: 'success',
-        //             summary: 'Successful',
-        //             detail: 'Product Updated',
-        //             life: 3000
-        //         });
-        //     } else {
-        //         this.product.id = this.createId();
-        //         this.product.image = 'product-placeholder.svg';
-        //         this.messageService.add({
-        //             severity: 'success',
-        //             summary: 'Successful',
-        //             detail: 'Product Created',
-        //             life: 3000
-        //         });
-        //         this.products.set([..._products, this.product]);
-        //     }
-  
-        //     this.productDialog = false;
-        //     this.product = {};
-        // }
-    }
   }
+  onAreaChange(event:any){
+ debugger
+      if ( event.value) {
+        this.loadBlocks( event.value);
+        this.ownerForm.patchValue({ blockId: null, plotId: null });
+        this.blocks = [];
+        this.plots = [];
+      }
+  
+  }
+  onBlockChange(event:any){
+debugger
+      if (event.value) {
+        this.loadPlots(event.value);
+        this.ownerForm.patchValue({ plotId: null });
+        this.plots = [];
+      }
+    
+  }
+  loadOwners() {
+   this.loading=true; 
+      this.sharedService.sendGetRequest('/Owner/list').subscribe({
+        next:(response :any)=>{    
+          debugger   
+          if(response && response.success){
+            this.loading=false;
+            this.owners=response.data;
+          }else{
+            this.loading=false;
+          }
+        },
+        error:(error:any)=>{
+           this.loading=false;
+        }
+      })
+  }
+
+  loadAreas() {
+    this.sharedService.sendGetRequest('/Area/getAreas').subscribe((data:any) => {
+         if(data && data.success){
+           debugger
+            this.areas=data.data;
+          }
+     
+    });
+  }
+
+  loadBlocks(areaId: number) {
+    this.sharedService.sendGetRequest(`/Area/${areaId}/blocks`).subscribe((data:any) => {
+      debugger
+      this.blocks = data;
+      this.ownerForm.patchValue({ blockId: null, plotId: null });
+    });
+  }
+loadBlocksEdit(areaId: number, preselectBlockId?: number, preselectPlotId?: number) {
+  this.sharedService.sendGetRequest(`/Area/${areaId}/blocks`).subscribe((data: any) => {
+    this.blocks = data;
+
+    if (preselectBlockId) {
+      this.ownerForm.patchValue({ blockId: preselectBlockId });
+      if (preselectBlockId) {
+        this.loadPlots(preselectBlockId, preselectPlotId);
+      }
+    }
+  });
+}
+loadPlots(blockId: number, preselectPlotId?: number) {
+  this.sharedService.sendGetRequest(`/Blocks/${blockId}/plots`).subscribe((data: any) => {
+    this.plots = data;
+
+    if (preselectPlotId) {
+      this.ownerForm.patchValue({ plotId: preselectPlotId });
+    }
+  });
+}
+
+openUpdateDialog(owner: any) {
+  this.ownerId=owner.id
+  this.ownerDialog = true;
+  this.ownerForm.patchValue({
+    name: owner.name,
+    email: owner.email,
+    phoneNumber: owner.phoneNumber,
+    areaId: owner.areaId,
+    blockId: null,
+    plotId: null
+  });
+  if (owner.areaId) {
+    this.loadBlocks(owner.areaId);
+    setTimeout(() => {
+      this.ownerForm.patchValue({ blockId: owner.blockId });
+      if (owner.blockId) {
+        this.loadPlots(owner.blockId);
+        setTimeout(() => {
+          this.ownerForm.patchValue({ plotId: owner.plotId });
+        }, 300);
+      }
+    }, 300);
+  }
+}
+
+  saveOwner() {
+    if (this.ownerForm.valid) {
+        this.sharedService.sendPostRequest('/Owner',this.ownerForm.value).subscribe({
+          next:(respose:any)=>{
+            
+            if(respose &&respose.success){
+              this.toastrService.showToast({
+                type: 'success',
+                shortMessage: 'Success!',
+                detail: respose.message,
+              });
+              this.ownerDialog=false;
+              this.resetDialog()
+              this.loadOwners();
+            }else{
+              this.toastrService.showToast({
+                type: 'error',
+                shortMessage: 'Error!',
+                detail: respose.message,
+              });
+              this.ownerDialog=false;
+            }
+          },
+          error:(error:any)=>{
+    
+          }
+        })
+      } else {
+        this.ownerForm.markAllAsTouched();
+        this.ownerForm.updateValueAndValidity();
+      }
+  }
+  resetDialog(){
+    this.ownerId=null
+    this.ownerForm.reset()
+  }
+  updateOwner(){
+     if (this.ownerForm.valid) {
+        this.sharedService.sendPutRequest('/Owner/update',this.ownerId,this.ownerForm.value).subscribe({
+          next:(respose:any)=>{        
+            if(respose &&respose.success){
+              this.toastrService.showToast({
+                type: 'success',
+                shortMessage: 'Success!',
+                detail: respose.message,
+              });
+              this.ownerDialog=false;
+              this.resetDialog()
+              this.loadOwners();
+            }else{
+              this.toastrService.showToast({
+                type: 'error',
+                shortMessage: 'Error!',
+                detail: respose.message,
+              });
+              this.ownerDialog=false;
+            }
+          },
+          error:(error:any)=>{
+    
+          }
+        })
+      } else {
+        this.ownerForm.markAllAsTouched();
+        this.ownerForm.updateValueAndValidity();
+      }
+  }
+}
   
   

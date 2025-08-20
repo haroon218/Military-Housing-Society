@@ -1,6 +1,6 @@
 export const environment = {
     appName: "Salvao",
     production: true,
-    apiUrl: 'https://zenmindapi-dev.cherryberrycloud.com/api', // production API URL
+    apiUrl: 'https://localhost:44328/api', // production API URL
   };
   

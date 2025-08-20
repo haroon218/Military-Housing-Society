@@ -10,11 +10,14 @@ import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
 import { RolePermissionService } from '../roles-permission/service/role-permission.service';
 import { TrigerToastService } from '../Shared/services/triger-toast.service';
+import { SharedService } from '../Shared/services/shared.service';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-area',
   imports: [
     ToolbarModule,
+  
                 ButtonModule, 
                 CommonModule,
                 TableModule,
@@ -22,15 +25,21 @@ import { TrigerToastService } from '../Shared/services/triger-toast.service';
                 IconFieldModule,   
                 InputTextModule, 
                 DialogModule,
-                ReactiveFormsModule
+                ReactiveFormsModule,
+                SkeletonModule
   ],
   templateUrl: './area.component.html',
   styleUrl: './area.component.scss'
 })
 export class AreaComponent {
-
-
-
+  skeletonRows = Array(5).fill(0);
+  selectedStatus:any
+  error:any
+  totalRecords:number=0
+  perPage: number =20; 
+  currentPage: number = 1;
+area:any=[]
+private sharedService=inject(SharedService)
  private permissionService=inject(RolePermissionService);
   private toastrService=inject(TrigerToastService)
   allPermissions:any=[]
@@ -41,26 +50,22 @@ loading:boolean=false;
     is_update:boolean = false;
     updateItemData:any;
     deleteItem:any;
-  
-    
-  
-    addPermissionForm = new FormGroup({
+    areaForm = new FormGroup({
       name:new FormControl("",[Validators.required])
     })
   
     constructor(){}
     ngOnInit(): void {
-      // this.getPermissions();
+      this.getAreas();
     }
-    getPermissions(){
-      this.loading=true;
-  
-      this.permissionService.getPermissions().subscribe({
-        next:(respose:any)=>{
-          
-          if(respose&&respose.Success){
-            this.allPermissions=respose.Data;
+    getAreas(){
+      this.loading=true; 
+      this.sharedService.sendGetRequest('/Area/getAreas').subscribe({
+        next:(response :any)=>{    
+          debugger   
+          if(response && response.success){
             this.loading=false;
+            this.area=response.data;
           }else{
             this.loading=false;
           }
@@ -71,23 +76,23 @@ loading:boolean=false;
       })
     }
     addPermission(){
-      if (this.addPermissionForm.valid) {
-        this.permissionService.addPermission(this.addPermissionForm.value).subscribe({
+      if (this.areaForm.valid) {
+        this.sharedService.sendPostRequest('/Area/addArea',this.areaForm.value).subscribe({
           next:(respose:any)=>{
             
-            if(respose&&respose.Success){
+            if(respose &&respose.success){
               this.toastrService.showToast({
                 type: 'success',
                 shortMessage: 'Success!',
-                detail: respose.Message,
+                detail: respose.message,
               });
               this.addRoleDialog=false;
-              this.getPermissions();
+              this.getAreas();
             }else{
               this.toastrService.showToast({
                 type: 'error',
                 shortMessage: 'Error!',
-                detail: respose.Message,
+                detail: respose.message,
               });
               this.addRoleDialog=false;
             }
@@ -97,32 +102,32 @@ loading:boolean=false;
           }
         })
       } else {
-        this.addPermissionForm.markAllAsTouched();
-        this.addPermissionForm.updateValueAndValidity();
+        this.areaForm.markAllAsTouched();
+        this.areaForm.updateValueAndValidity();
       }
     }
   
     updatePermission(){
-      if (this.addPermissionForm.valid) {
-        this.permissionService.updatPermission(this.updateItemData.id,this.addPermissionForm.value).subscribe({
+      if (this.areaForm.valid) {
+        this.sharedService.sendPutRequest('/Area/update-Area',this.updateItemData.id,this.areaForm.value).subscribe({
           next:(respose:any)=>{
             
-            if(respose&&respose.Success){
+            if(respose){
               this.addRoleDialog=false;
               this.is_update=false;
               this.toastrService.showToast({
                 type: 'success',
                 shortMessage: 'Success!',
-                detail: respose.Message,
+                detail: respose.message,
               });
-              this.getPermissions();
+              this.getAreas();
             }else{
              this.addRoleDialog=false;
              this.is_update=false
              this.toastrService.showToast({
               type: 'success',
               shortMessage: 'Success!',
-              detail: respose.Message,
+              detail: respose.message,
             });
             }
           },
@@ -131,17 +136,17 @@ loading:boolean=false;
           }
         })
       } else {
-        this.addPermissionForm.markAllAsTouched();
-        this.addPermissionForm.updateValueAndValidity();
+        this.areaForm.markAllAsTouched();
+        this.areaForm.updateValueAndValidity();
       }
     }
      
-    openNew(){this.addRoleDialog = true ; this.addPermissionForm.reset()}
+    openNew(){this.addRoleDialog = true ; this.areaForm.reset()}
     deleteSelectedProducts(){}
     editProduct(data:any){
       this.updateItemData = data;
       this.is_update = true
-      this.addPermissionForm.patchValue(data)
+      this.areaForm.patchValue(data)
       this.addRoleDialog  = true
     }
     deletePermission(data:any){
@@ -154,23 +159,23 @@ loading:boolean=false;
     saveProduct(){}
   
     removeRole(){
-      this.permissionService.deletePermission(this.deleteItem.id).subscribe({
+      this.sharedService.sendDeleteRequest('/Area/delete-Area',this.deleteItem.id).subscribe({
         next:(respose:any)=>{
           
-          if(respose&&respose.Success){
+          if(respose){
             this.deleteDialog=false;
             this.toastrService.showToast({
               type: 'success',
               shortMessage: 'Success!',
-              detail: respose.Message,
+              detail: respose.message,
             });
-            this.getPermissions();
+            this.getAreas();
           }else{
            this.deleteDialog=false;
            this.toastrService.showToast({
             type: 'success',
             shortMessage: 'Success!',
-            detail: respose.Message,
+            detail: respose.message,
           });
           }
         },
