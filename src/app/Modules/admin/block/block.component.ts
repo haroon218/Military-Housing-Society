@@ -37,7 +37,7 @@ export class BlockComponent {
   totalRecords:any=20
   private sharedService=inject(SharedService)
   private toastrService=inject(TrigerToastService)
-  allPermissions:any=[]
+  allPermissions:any[]=[]
 loading:boolean=false;
   selectedProducts:any;
     addRoleDialog:boolean = false;

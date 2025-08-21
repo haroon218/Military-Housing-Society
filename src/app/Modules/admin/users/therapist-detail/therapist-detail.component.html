@@ -1,155 +1,159 @@
 
+        
 
+    <div class="container my-4">
+        <div class="bill-container">
+            <!-- Header Section -->
+            <div class="green-header">
+                <div class="logo-container">
+                    <i class="fas fa-bolt logo"></i>
+                    <div>
+                        <h2>MILITARY ACCOUNTS CO-OPERATIVE HOUSING SOCIETY</h2>
+                        <p>Electricity Billing System</p>
+                    </div>
+                </div>
+            </div>
 
-  
- <div *ngIf="showPrintView" >
-  <div #invoiceCont>
-  <div class="header">
-   <div class="row">
-    <div class="col-8">
-     <h5>
-      MILITARY ACCOUNTS CO-OPERATIVE HOUSING SOCIETY
-     </h5>
-     <p>
-      {{billData?.ownerName}}
-      <br/>
-      Plot No :{{billData?.plotName}}
-      <br/>
-      Reference No :{{billData?.referenceNo}}
-     </p>
+            <div class="content-section">
+                <!-- Customer Information -->
+                <div class="customer-info">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h4>Customer Details</h4>
+                            <p><strong>Name:</strong> John David Smith</p>
+                            <p><strong>Plot No:</strong> B-12, Sector 5</p>
+                            <p><strong>Reference No:</strong> MACHS-2023-0876</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <p><strong>Issue Date:</strong> 15-Aug-2023</p>
+                            <p><strong>Due Date:</strong> 31-Aug-2023</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Billing History and Current Bill -->
+                <h4 class="section-title">Billing Information</h4>
+                <div class="d-flex justify-content-between flex-wrap">
+                    <div class="billing-history">
+                        <h5>Billing History</h5>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>MONTH</th>
+                                    <th>BILL RECEIPT DATE</th>
+                                    <th>PAYMENT DATE</th>
+                                    <th>STATUS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>July 2023</td>
+                                    <td>15/07/2023</td>
+                                    <td>20/07/2023</td>
+                                    <td>Paid</td>
+                                </tr>
+                                <tr>
+                                    <td>June 2023</td>
+                                    <td>15/06/2023</td>
+                                    <td>18/06/2023</td>
+                                    <td>Paid</td>
+                                </tr>
+                                <tr>
+                                    <td>May 2023</td>
+                                    <td>15/05/2023</td>
+                                    <td>22/05/2023</td>
+                                    <td>Paid</td>
+                                </tr>
+                                <tr>
+                                    <td>April 2023</td>
+                                    <td>15/04/2023</td>
+                                    <td>19/04/2023</td>
+                                    <td>Paid</td>
+                                </tr>
+                                <tr>
+                                    <td>March 2023</td>
+                                    <td>15/03/2023</td>
+                                    <td>25/03/2023</td>
+                                    <td>Paid</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="current-bill">
+                        <div class="current-bill-header">
+                            <h5>CURRENT BILL</h5>
+                        </div>
+                        <div class="p-3">
+                            <div class="bill-detail">
+                                <span>Reference No:</span>
+                                <span>MACHS-2023-0876</span>
+                            </div>
+                            <div class="bill-detail">
+                                <span>Billing Month:</span>
+                                <span>August 2023</span>
+                            </div>
+                            <div class="bill-detail">
+                                <span>Issue Date:</span>
+                                <span>15/08/2023</span>
+                            </div>
+                            <div class="bill-detail">
+                                <span>Due Date:</span>
+                                <span class="highlight">31/08/2023</span>
+                            </div>
+                            <div class="bill-detail">
+                                <span>Units Consumed:</span>
+                                <span>450 kWh</span>
+                            </div>
+                            <div class="bill-detail total-amount">
+                                <span>Total Amount:</span>
+                                <span>Rs. 3,450.00</span>
+                            </div>
+                            <div class="payment-status">
+                                Payment Pending
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Complaint Office -->
+                <div class="complaint-office">
+                    <h5 class="section-title">COMPLAINT OFFICE</h5>
+                    <p class="contact-info">
+                        <i class="fas fa-phone-alt"></i> FOR SUPPLY FAILURE CONTACT OFFICE: 042 35959766
+                    </p>
+                    <p class="note">
+                        <i class="fas fa-info-circle"></i> نوٹ: براہ کرم بل کی ادائیگی کے بعد رسید سنبھال کر رکھیں۔
+                    </p>
+                </div>
+
+                <!-- Bank Details -->
+                <div class="bank-details">
+                    <h5 class="section-title">ONLINE BANKING DETAILS</h5>
+                    <p><i class="fas fa-university"></i> ASKARI BANK ACCOUNT IBAN</p>
+                    <p class="fw-bold">PK50ASCM000321605001200</p>
+                    <p>After Payment Send Receipt To: billingmilitaryaccounts.com</p>
+                </div>
+
+                <!-- Footer -->
+                <div class="footer">
+                    <h5>BANK COPY</h5>
+                    <p>MILITARY ACCOUNTS CO-OPERATIVE HOUSING SOCIETY - BILLING</p>
+                    <div class="d-flex justify-content-center">
+                        <p class="mx-3"><strong>Ref No:</strong> MACHS-2023-0876</p>
+                        <p class="mx-3"><strong>Plot No:</strong> B-12, Sector 5</p>
+                        <p class="mx-3"><strong>Due Date:</strong> 31-Aug-2023</p>
+                        <p class="mx-3"><strong>Amount:</strong> Rs. 3,450.00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Print Button -->
+        <div class="action-buttons no-print">
+            <button class="btn-print" onclick="window.print()">
+                <i class="fas fa-print"></i> Print Bill
+            </button>
+        </div>
     </div>
-    
-   </div>
-  </div>
-  <div class="billing-details">
-   <!-- <h6>
-    BILLING DETAILS FOR SERVICES
-   </h6> -->
-   <!-- <table>
-    <thead>
-     <tr>
-      <th>
-       WATER
-      </th>
-      <th>
-       SEWERAGE
-      </th>
-      <th>
-       SECURITY
-      </th>
-      <th>
-       MAINTENANCE
-      </th>
-     </tr>
-    </thead>
-    <tbody>
-     <tr>
-      <td>
-       200
-      </td>
-      <td>
-       50
-      </td>
-      <td>
-       50
-      </td>
-      <td>
-       50
-      </td>
-     </tr>
-     <tr>
-      <td class="due-date" colspan="4">
-       DUE DATE: 10/12/2025
-      </td>
-     </tr>
-     <tr>
-      <td class="payable-bill" colspan="4">
-       PAYABLE BILL ON DUE DATE: 3450.00
-      </td>
-     </tr>
-     <tr>
-      <td class="payable-bill-after" colspan="4">
-       PAYABLE BILL AFTER DUE DATE: 3900.00
-      </td>
-     </tr>
-    </tbody>
-   </table> -->
-  </div>
-  <div style="display: flex;justify-content: space-between;">
- <div class="billing-history">
-  <h6>
-    BILLING HISTORY
-  </h6>
-  <table>
-    <thead>
-      <tr>
-        <th>MONTH</th>
-        <th>BILL RECEIPT DATE</th>
-        <th>PAYMENT DATE</th>
-        <th>PAYMENT</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let history of billData?.billingHistory">
-        <td>{{ history.month }}</td>
-        <td>{{ history.issueDate ? (history.issueDate | date:'dd/MM/yyyy') : '-' }}</td>
-        <td>{{ history.paidDate ? (history.paidDate | date:'dd/MM/yyyy') : '-' }}</td>
-        <td>{{ history.status }}</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
 
-  <div class="complaint-office">
-   <h6>
-    COMPLAINT OFFICE
-   </h6>
-   <p class="contact-info">
-    FOR SUPPLY FAILURE CONTACT OFFICE: 042 35959766
-   </p>
-   <p class="note">
-    نوٹ: براہ کرم بل کی ادائیگی کے بعد رسید سنبھال کر رکھیں۔
-   </p>
-  </div>
-</div>
-  <div class="bank-details">
-   <h6>
-    ONLINE ASKARI BANK ACCOUNT IBAN
-   </h6>
-   <p>
-    PK50ASCM000321605001200
-   </p>
-   <p>
-    After Payment Send It To billingmilitaryaccounts.com
-   </p>
-  </div>
-  <div class="footer">
-   <div class="row">
-    <div class="col-8">
-     <p>
-      BANK COPY
-     </p>
-     <p>
-      MILITARY ACCOUNTS CO-OPERATIVE HOUSING SOCIETY - BILLING
-     </p>
-     <p>
-      REFERENCE NO:{{billData.referenceNo}}
-     </p>
-     
-     
-     <p>
-      Plot No :{{billData.plotName}}
-     </p>
-     <p>
-      DUE DATE:{{billData.dueDate |date}}
-     </p>
-     <p>
-      AMOUNT: Rs.{{billData.amount}}
-     </p>
-    </div>
-
-   </div>
-  </div>
-
-</div>
-</div>

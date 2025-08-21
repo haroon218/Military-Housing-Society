@@ -1,77 +1,84 @@
-<p-toolbar styleClass="mb-6">
-    <ng-template #start>
-        <p-button label="New" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="ownerDialog=true" />
-       
-    </ng-template>
 
-    <!-- <ng-template #end>
-        <p-button label="Export" icon="pi pi-upload" severity="secondary" (onClick)="exportCSV()" />
-    </ng-template> -->
-</p-toolbar>
 
 <p-table
     #dt
     [value]="owners"
-    [rows]="10"
-    [columns]="cols"
+    [rows]="perPage"
+    [loading]="dataLoading"
+    loadingIcon="pi pi-spinner pi-spin"
     [paginator]="true"
-    [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
-    [tableStyle]="{ 'min-width': '75rem' }"
-    [(selection)]="owners"
     [rowHover]="true"
-    dataKey="id"
+    [totalRecords]="totalRecords"
+    [lazy]="true"
+    [scrollable]="true"
+    scrollHeight="67vh"
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Owners"
     [showCurrentPageReport]="true"
     [rowsPerPageOptions]="[10, 20, 30]"
 >
+
+    <!-- Caption -->
     <ng-template #caption>
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between w-full">
             <h5 class="m-0">Manage Plot Owners</h5>
-            <p-iconfield>
-                <p-inputicon styleClass="pi pi-search" />
-                <input pInputText type="text"  placeholder="Search..." />
-            </p-iconfield>
+            <p-button label="New" icon="pi pi-plus" severity="secondary" class="mr-2"(onClick)="ownerDialog=true"/>
         </div>
     </ng-template>
-    <ng-template #header>
+
+    <!-- Table Header -->
+    <ng-template pTemplate="header">
         <tr>
             <th>Owner Name</th>
-              <th >Email</th>
-            <th >Block Name</th>
-            <th pSortableColumn="name" >
-                Plot No
-                <p-sortIcon field="name" />
-            </th>
-            <th pSortableColumn="name" >
-                Area
-                <p-sortIcon field="name" />
-            </th>
-                       <th >Bills Reference Number</th>
+            <th>Email</th>
+            <th>Block Name</th>
+            <th pSortableColumn="plotNo">Plot No<p-sortIcon field="plotNo" /></th>
+            <th pSortableColumn="areaName">Area<p-sortIcon field="areaName" /></th>
+            <th>Bills Reference Number</th>
             <th>Action</th>
         </tr>
     </ng-template>
-    <ng-template #body let-owner>
-        <tr>
-            <!-- <td style="width: 3rem">
-                <p-tableCheckbox [value]="product" />
-            </td> -->
-            <td>{{ owner.name }}</td>
-               <td>{{ owner.email }}</td>
-            <td >{{ owner.blockName }}</td>
 
-            <td >{{ owner.plotNo }}</td>
+    <!-- Table Body -->
+    <ng-template pTemplate="body" let-owner>
+        <tr *ngIf="!dataLoading && owners.length > 0">
+            <td>{{ owner.name }}</td>
+            <td>{{ owner.email }}</td>
+            <td>{{ owner.blockName }}</td>
+            <td>{{ owner.plotNo }}</td>
+            <td>{{ owner.areaName }}</td>
+            <td>{{ owner.referenceNo || 'N/A' }}</td>
             <td>
-            {{ owner.areaName }}
-            </td>
-            <td>
-            {{ owner?.referenceNo }}
-            </td>
-            <td>
-                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (onClick)="openUpdateDialog(owner)"  />
-                <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" />
+                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="openUpdateDialog(owner)" />
+                
             </td>
         </tr>
     </ng-template>
+
+    <!-- Skeleton Loading -->
+    <ng-template pTemplate="loadingbody">
+        <tr *ngFor="let _ of skeletonRows">
+            <td><p-skeleton></p-skeleton></td>
+            <td><p-skeleton></p-skeleton></td>
+            <td><p-skeleton></p-skeleton></td>
+            <td><p-skeleton></p-skeleton></td>
+            <td><p-skeleton></p-skeleton></td>
+            <td><p-skeleton></p-skeleton></td>
+            <td><p-skeleton></p-skeleton></td>
+        </tr>
+    </ng-template>
+
+    <!-- Empty Message -->
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="7">
+                <div class="flex flex-col items-center justify-center mt-5 text-gray-500">
+                    <i class="pi pi-exclamation-circle" style="font-size: 2rem; color: red;"></i>
+                    <div class="mt-2">{{'No Records Found' }}</div>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+
 </p-table>
 
 <p-dialog [(visible)]="ownerDialog" [style]="{ width: '500px' }" [header]="ownerId?'Update Owner':'Add Owner'" [modal]="true" [draggable]="false" (onHide)="resetDialog()">
@@ -144,7 +151,7 @@
   </form>
    <ng-template pTemplate="footer">
       <p-button label="Cancel" icon="pi pi-times" (click)="ownerDialog=false"></p-button>
-      <button pButton type="submit" label="Save" icon="pi pi-check" [disabled]="ownerForm.invalid" (click)="ownerId?updateOwner():saveOwner()"></button>
+      <button pButton type="submit" label="Save" icon="pi pi-check" [loading]="loading" [disabled]="ownerForm.invalid" (click)="ownerId?updateOwner():saveOwner()"></button>
     </ng-template>
 </p-dialog>
 

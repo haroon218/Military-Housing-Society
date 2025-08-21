@@ -14,6 +14,7 @@ import { SharedService } from '../../Shared/services/shared.service';
 })
 export class DashboardComponent {
   chartData: any;
+  dataloading:boolean=false
 years: number[] = [];
 months: any[] = [];
 selectedYear: number = new Date().getFullYear();
@@ -32,6 +33,7 @@ selectedMonth?: number;
   }
 
   ngOnInit() {
+    this.dataloading=true
    this.sharedService.sendGetRequest('/Dashboard/filters').subscribe((res:any) => {
     if(res.success){
     this.years = res.data.years;
@@ -45,6 +47,7 @@ selectedMonth?: number;
 loadSummary() {
   this.sharedService.sendGetRequest('/Dashboard/summary',[],{year:this.selectedYear, month:this.selectedMonth}).subscribe((summary:any) => {
     if(summary.success){
+      this.dataloading=false
     this.totalAmount = summary.data.totalAmount;
     this.paidAmount = summary.data.paidAmount;
     this.paidCount = summary.data.paidCount;

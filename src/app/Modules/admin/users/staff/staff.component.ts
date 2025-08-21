@@ -22,6 +22,7 @@ import { UserService } from '../service/user.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TrigerToastService } from '../../Shared/services/triger-toast.service';
 import { SharedService } from '../../Shared/services/shared.service';
+import { SkeletonModule } from 'primeng/skeleton';
 interface Column {
   field: string;
   header: string;
@@ -53,7 +54,7 @@ interface ExportColumn {
         TagModule,
         InputIconModule,
         IconFieldModule,
-        CheckboxModule,ReactiveFormsModule
+        CheckboxModule,ReactiveFormsModule,SkeletonModule
   ],
   templateUrl: './staff.component.html',
   styleUrl: './staff.component.scss',
@@ -61,7 +62,7 @@ interface ExportColumn {
   
 })
 export class StaffComponent {
-
+ skeletonRows = Array(5).fill(0);
   private toastrService=inject(TrigerToastService)
   staffData:any=[ {
     id: '1000',
@@ -98,6 +99,7 @@ export class StaffComponent {
   inventoryStatus: 'Accepted',
   rating: 5
 },];
+saveLoading:boolean=false;
 userDialog:boolean=false
  private fb=inject(FormBuilder)
 private sharedService=inject(SharedService)
@@ -108,6 +110,9 @@ private sharedService=inject(SharedService)
   submitted: boolean = false;
   statuses!: any[];
   pizza: any
+  totalRecords:number=0
+  dataLoading:boolean=false
+  perPage:number=10
   roles:any=[]
     users:any=[]
   @ViewChild('dt') dt!: Table;
@@ -149,16 +154,19 @@ getAllRoles() {
 }
 
      getAllUsers(){
-
+this.dataLoading=true
     this.sharedService.sendGetRequest('/User').subscribe({
       next:(respose:any)=>{ 
         if(respose&&respose.success){
           this.users=respose.data;
+          this.totalRecords=this.users.length
          
         }
       },
       error:(error:any)=>{
        
+      },complete:()=>{
+        this.dataLoading=false
       }
     })
   }
@@ -173,9 +181,9 @@ openUpdateDialog(user: any) {
 
   saveUser() {
     if (this.userForm.valid) {
+      this.saveLoading=true;
         this.sharedService.sendPostRequest('/User',this.userForm.value).subscribe({
-          next:(respose:any)=>{
-            
+          next:(respose:any)=>{  
             if(respose &&respose.success){
               this.toastrService.showToast({
                 type: 'success',
@@ -196,7 +204,9 @@ openUpdateDialog(user: any) {
             }
           },
           error:(error:any)=>{
-    
+    this.saveLoading=false
+          },complete:()=>{
+            this.saveLoading=false
           }
         })
       } else {
@@ -206,6 +216,7 @@ openUpdateDialog(user: any) {
   }
   updateUser(){
      if (this.userForm.valid) {
+      this.saveLoading=true
         this.sharedService.sendPutRequest('/User',this.userId,this.userForm.value).subscribe({
           next:(respose:any)=>{        
             if(respose &&respose.success){
@@ -227,7 +238,9 @@ openUpdateDialog(user: any) {
             }
           },
           error:(error:any)=>{
-    
+    this.saveLoading=true
+          },complete:()=>{
+            this.saveLoading=false
           }
         })
       } else {

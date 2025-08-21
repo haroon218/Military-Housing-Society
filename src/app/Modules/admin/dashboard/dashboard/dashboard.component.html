@@ -9,7 +9,11 @@
                 <div>
                     <span class="block text-muted-color font-medium mb-4">Total Bills Amount</span>
                     <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">
+                                    @if(dataloading) {
+            <i class="pi pi-spinner pi-spin text-xl" style="font-size: inherit"></i>
+            } @else{
                         Rs.{{totalAmount}}
+            }
                     </div>
                 </div>
                 
@@ -25,7 +29,10 @@
             <div class="flex justify-between mb-4">
                 <div>
                     <span class="block text-muted-color font-medium mb-4">Paid Bills Amount</span>
-                    <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">Rs.{{paidAmount}}</div>
+                    <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">
+                            @if(dataloading) {
+            <i class="pi pi-spinner pi-spin text-xl" style="font-size: inherit"></i>
+            } @else{Rs.{{paidAmount}}}</div>
                 </div>
                 <div class="flex items-center justify-center bg-orange-100 dark:bg-orange-400/10 rounded-border" style="width: 2.5rem; height: 2.5rem">
                     <i class="pi pi-credit-card text-orange-500 !text-xl"></i>
@@ -39,7 +46,13 @@
             <div class="flex justify-between mb-4">
                 <div>
                     <span class="block text-muted-color font-medium mb-4">Paid Bills</span>
-                    <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">{{paidCount}}</div>
+                    <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">
+                            @if(dataloading) {
+            <i class="pi pi-spinner pi-spin text-xl" style="font-size: inherit"></i>
+            } @else{
+                        {{paidCount}}
+            }
+                    </div>
                 </div>
                 <div class="flex items-center justify-center bg-cyan-100 dark:bg-cyan-400/10 rounded-border" style="width: 2.5rem; height: 2.5rem">
                     <i class="pi pi-check-circle text-cyan-500 !text-xl"></i>
@@ -53,7 +66,12 @@
             <div class="flex justify-between mb-4">
                 <div>
                     <span class="block text-muted-color font-medium mb-4">Unpaid Bills</span>
-                    <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">{{unpaidCount}}</div>
+                    <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">
+                            @if(dataloading) {
+            <i class="pi pi-spinner pi-spin text-xl" style="font-size: inherit"></i>
+            } @else{
+                        {{unpaidCount}}
+            }</div>
                 </div>
                 <div class="flex items-center justify-center bg-purple-100 dark:bg-purple-400/10 rounded-border" style="width: 2.5rem; height: 2.5rem">
                     <i class="pi pi-exclamation-circle text-red-500 !text-xl"></i>

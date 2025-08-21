@@ -1,0 +1,161 @@
+
+<p-table #dt [value]="faqData" [rows]="perPage" [loading]="dataLoading" loadingIcon="none" [paginator]="true"
+    [rowHover]="true" [totalRecords]="totalRecords" [lazy]="true" [scrollable]="true" scrollHeight="67vh"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vents" [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[20,30,40]" (onPage)="onPageChange($event)">
+    <ng-template #caption>
+        <div class="flex items-center justify-between w-full">
+            <h5 class="m-0">Manage PayRolls</h5>
+                   <p-button label="New" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="openpayrollDialog()" />
+
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Name</th>
+            <th>Designation</th>
+         <th>Month</th>
+           <th>Amount</th>
+         <th>Paid Date</th>
+          <th>Status</th>
+           <th>Action</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-faq>
+        @if(!dataLoading && faqData.length>0){
+        <tr>
+            <td>{{ faq.userName }}</td>
+
+            <td>{{faq.role}}</td>
+           <td>{{ faq.month |date }}</td>
+
+            <td>Rs{{faq.amount}}</td>
+          <td>{{ faq.paidDate ? (faq.paidDate | date) : 'N/A' }}</td>
+
+            <td>
+                <p-tag [value]="faq.status" [severity]="getSeverity(faq.status)" />
+            </td>
+            <td>
+                 <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true"
+                    (click)="openpayrollDialog(faq)" />
+          
+  <p-select
+    [options]="statuses" 
+    [(ngModel)]="faq.status" appendTo="body"
+    placeholder="Change Status"
+    (onChange)="changeStatus(faq)">
+  </p-select>
+</td>
+        </tr>
+    }
+    </ng-template>
+    <ng-template pTemplate="loadingbody">
+        <tr *ngFor="let _ of skeletonRows">
+            <td><p-skeleton></p-skeleton></td>
+            <td><p-skeleton></p-skeleton></td>
+            <td><p-skeleton></p-skeleton></td>
+            <td><p-skeleton></p-skeleton></td>
+            <td><p-skeleton></p-skeleton></td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="6">
+                <div style="
+                        margin-top: 20px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 100%;
+                        flex-direction: column;
+                        color: #888;
+                    ">
+                    <i class="pi pi-exclamation-circle" style="font-size: 2rem; color: red;"></i>
+                    <div style="margin-top: 1rem;">{{error?error:'No Records Found'}}
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+
+<p-dialog [(visible)]="payrollDialog" 
+          [style]="{ width: '750px'}"
+          [header]="isViewMode ? 'View Payroll' : (is_update ? 'Update Payroll' : 'Generate Payroll')" 
+          [modal]="true"
+          [draggable]="false" 
+          (onHide)="closepayrollDialog()">
+
+  <form [formGroup]="payrollForm" class="payroll-form">
+
+    <!-- First Row: User & Month -->
+    <div class="form-row">
+      <div class="form-group">
+        <label>User</label>
+        <p-select [options]="users" optionLabel="username" optionValue="id"
+                    formControlName="userId" placeholder="Select User" [disabled]="isViewMode">
+        </p-select>
+        <small *ngIf="payrollForm.get('userId')?.touched && payrollForm.get('userId')?.hasError('required')" 
+               class="text-red-500">User is required</small>
+      </div>
+
+      <div class="form-group">
+        <label>Month</label>
+        <p-calendar formControlName="month" [view]="'month'" appendTo="body" [monthNavigator]="true" [yearNavigator]="true"
+                    [yearRange]="'2020:2030'" [disabled]="isViewMode">
+        </p-calendar>
+        <small *ngIf="payrollForm.get('month')?.touched && payrollForm.get('month')?.hasError('required')" 
+               class="text-red-500">Month is required</small>
+      </div>
+    </div>
+
+    <!-- Second Row: Amount & Status -->
+    <div class="form-row">
+      <div class="form-group">
+        <label>Amount</label>
+        <input type="number" pInputText formControlName="amount" placeholder="Enter amount" [disabled]="isViewMode">
+        <small *ngIf="payrollForm.get('amount')?.touched && payrollForm.get('amount')?.hasError('required')" 
+               class="text-red-500">Amount is required</small>
+      </div>
+
+      <div class="form-group">
+        <label>Status</label>
+        <p-select [options]="statuses" formControlName="status" appendTo="body" optionLabel="label" optionValue="value" [disabled]="isViewMode" placeholder="Select Status">
+        </p-select>
+      </div>
+    </div>
+
+  </form>
+
+  <ng-template #footer>
+    <div class="flex justify-content-end gap-2">
+      <p-button label="Cancel" icon="pi pi-times" severity="secondary" (click)="closepayrollDialog()"></p-button>
+      <p-button *ngIf="!isViewMode" 
+                [label]="is_update ? 'Update' : 'Generate'" 
+                icon="pi pi-check" 
+                [loading]="isLoading" 
+                (click)="savefaq()">
+      </p-button>
+    </div>
+  </ng-template>
+
+</p-dialog>
+
+
+
+
+<p-dialog [(visible)]="deleteRoleDialogShow" [style]="{ width: '450px' }" header="Delete Role" [modal]="true"
+    [draggable]="true">
+    <ng-template #content>
+        <div class="flex">
+            <i class="pi pi-exclamation-triangle" style="font-size: 15px;"></i>
+            <span class="ml-2"> Are you sure you want to delete ?</span>
+        </div>
+    </ng-template>
+
+    <ng-template #footer>
+        <p-button label="No" (click)="deleteRoleDialogShow = false" />
+        <p-button severity="danger" [label]="isLoading?'':'Yes'" [loading]="isLoading" (click)="deleteRole()" />
+    </ng-template>
+</p-dialog>

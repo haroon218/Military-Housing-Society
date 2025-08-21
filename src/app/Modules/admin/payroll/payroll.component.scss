@@ -1,0 +1,16 @@
+.payroll-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* space between rows */
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem; /* space between columns */
+}
+
+.form-group {
+  flex: 1; /* equal width for all fields in a row */
+  display: flex;
+  flex-direction: column;
+}

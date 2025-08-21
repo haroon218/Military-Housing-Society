@@ -1,91 +1,75 @@
-<p-toolbar styleClass="mb-6">
-    <ng-template #start>
-        <p-button label="New" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="openNew()" />
-    </ng-template>
-
-    <!-- <ng-template #end>
-        <p-button label="Export" icon="pi pi-upload" severity="secondary" (onClick)="exportCSV()" />
-    </ng-template> -->
-</p-toolbar>
 
 <p-table
     #dt
     [value]="users"
-    [rows]="5"
-    [columns]="cols"
+    [rows]="perPage"
+    [loading]="dataLoading"
+    loadingIcon="pi pi-spinner pi-spin"
     [paginator]="true"
-    [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
-    [tableStyle]="{ 'min-width': '75rem' }"
-    [(selection)]="selectedProducts"
     [rowHover]="true"
-    dataKey="id"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+    [totalRecords]="totalRecords"
+    [lazy]="true"
+    [scrollable]="true"
+    scrollHeight="67vh"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users"
     [showCurrentPageReport]="true"
     [rowsPerPageOptions]="[10, 20, 30]"
->
+   >
+
+    <!-- Caption -->
     <ng-template #caption>
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between w-full">
             <h5 class="m-0">Manage Staff</h5>
-            <p-iconfield>
-                <p-inputicon styleClass="pi pi-search" />
-                <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..." />
-            </p-iconfield>
+            <p-button label="New" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="openNew()" />
         </div>
     </ng-template>
-    <ng-template #header>
+
+    <!-- Table Header -->
+    <ng-template pTemplate="header">
         <tr>
-            <!-- <th style="width: 3rem">
-                <p-tableHeaderCheckbox />
-            </th> -->
-            <th style="max-width: 16rem">Name</th>
-            <th style="max-width: 16rem">Email</th>
-            <th pSortableColumn="name" style="max-width:16rem">
-                Role
-                <p-sortIcon field="name" />
-            </th>
-            
-            <!-- <th>Image</th>
-            <th pSortableColumn="price" style="min-width: 8rem">
-                Price
-                <p-sortIcon field="price" />
-            </th> -->
-            <!-- <th pSortableColumn="category" style="min-width:10rem">
-                Category
-                <p-sortIcon field="category" />
-            </th>
-            <th pSortableColumn="rating" style="min-width: 12rem">
-                Reviews
-                <p-sortIcon field="rating" />
-            </th> -->
-          
-            <th style="max-width: 12rem">Action</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Action</th>
         </tr>
     </ng-template>
-    <ng-template #body let-user>
+
+    <!-- Table Body -->
+    <ng-template pTemplate="body" let-user>
+        <tr *ngIf="!dataLoading && users.length > 0">
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.role?.name || 'N/A' }}</td>
+            <td>
+                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="openUpdateDialog(user)" />
+                <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteUser(user.id)" />
+            </td>
+        </tr>
+    </ng-template>
+
+    <!-- Skeleton Loading -->
+    <ng-template pTemplate="loadingbody">
+        <tr *ngFor="let _ of skeletonRows">
+            <td><p-skeleton></p-skeleton></td>
+            <td><p-skeleton></p-skeleton></td>
+            <td><p-skeleton></p-skeleton></td>
+            <td><p-skeleton></p-skeleton></td>
+        </tr>
+    </ng-template>
+
+    <!-- Empty Message -->
+    <ng-template pTemplate="emptymessage">
         <tr>
-            <!-- <td style="width: 3rem">
-                <p-tableCheckbox [value]="product" />
-            </td> -->
-            <td style="max-width: 12rem">{{ user.username }}</td>
-            <td style="max-width: 12rem">{{ user.email }}</td>
-
-            <td style="max-width: 16rem">{{ user.role.name }}</td>
-           
-            <!-- <td>{{ product.price | currency: 'USD' }}</td>
-            <td>{{ product.category }}</td>
-            <td>
-                <p-rating [(ngModel)]="product.rating" [readonly]="true" />
-            </td> -->
-          
-            <td>
-                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (onClick)="openUpdateDialog(user)"  />
-                <p-button icon="pi pi-trash" severity="danger" class="mr-2" [rounded]="true" [outlined]="true" (click)="deleteUser(user.id)" />
-            
-
+            <td colspan="4">
+                <div class="flex flex-col items-center justify-center mt-5 text-gray-500">
+                    <i class="pi pi-exclamation-circle" style="font-size: 2rem; color: red;"></i>
+                    <div class="mt-2">{{ 'No Records Found' }}</div>
+                </div>
             </td>
         </tr>
     </ng-template>
 </p-table>
+
 
 <p-dialog [(visible)]="userDialog" [style]="{ width: '450px' }" [modal]="true" header="{{ userId ? 'Edit User' : 'Add User' }}" [draggable]="false">
   <form [formGroup]="userForm" >
@@ -114,7 +98,7 @@
   </form>
     <ng-template pTemplate="footer">
       <p-button label="Cancel" icon="pi pi-times" text (click)="hideDialog()"></p-button>
-      <button pButton type="submit" label="Save" icon="pi pi-check" (click)="userId?updateUser():saveUser()"></button>
+      <button pButton type="submit" label="Save" [loading]="saveLoading" icon="pi pi-check" (click)="userId?updateUser():saveUser()"></button>
     </ng-template>
 </p-dialog>
 

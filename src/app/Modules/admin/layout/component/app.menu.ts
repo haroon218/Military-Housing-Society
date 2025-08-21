@@ -82,7 +82,14 @@ export class AppMenu {
             {
                 label: 'Events',
                 items: [
-                    { label: 'Events', icon: 'pi pi-fw pi-comments',routerLink: ['/admin/events'] }
+                    { label: 'Events', icon: 'pi pi-calendar',routerLink: ['/admin/events'] }
+                   
+             ]
+            },
+            {
+                label: 'Finance',
+                items: [
+                    { label: 'PayRolls', icon: 'pi pi-money-bill',routerLink: ['/admin/payroll'] }
                    
              ]
             },

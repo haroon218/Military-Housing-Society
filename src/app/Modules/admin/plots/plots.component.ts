@@ -48,7 +48,7 @@ loading:boolean=false;
     is_update:boolean = false;
     updateItemData:any;
     deleteItem:any;
-    plots:any=[]
+    plots:any[]=[]
     houseSizes:any=[]
     plotForm = new FormGroup({
       name:new FormControl("",[Validators.required]),

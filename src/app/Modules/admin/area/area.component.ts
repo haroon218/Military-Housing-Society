@@ -38,9 +38,9 @@ export class AreaComponent {
   totalRecords:number=0
   perPage: number =20; 
   currentPage: number = 1;
-area:any=[]
+area:any[]=[]
 private sharedService=inject(SharedService)
- private permissionService=inject(RolePermissionService);
+
   private toastrService=inject(TrigerToastService)
   allPermissions:any=[]
 loading:boolean=false;
@@ -63,15 +63,15 @@ loading:boolean=false;
       this.sharedService.sendGetRequest('/Area/getAreas').subscribe({
         next:(response :any)=>{    
           debugger   
-          if(response && response.success){
-            this.loading=false;
+          if(response && response.success){       
             this.area=response.data;
-          }else{
-            this.loading=false;
+            this.totalRecords=this.area.length
           }
         },
         error:(error:any)=>{
            this.loading=false;
+        },complete:()=>{
+          this.loading=false
         }
       })
     }

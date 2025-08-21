@@ -19,6 +19,7 @@ import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { SharedService } from '../../Shared/services/shared.service';
 import { TrigerToastService } from '../../Shared/services/triger-toast.service';
+import { SkeletonModule } from 'primeng/skeleton';
 interface Column {
   field: string;
   header: string;
@@ -49,6 +50,7 @@ interface ExportColumn {
         TagModule,
         InputIconModule,
         IconFieldModule,
+        SkeletonModule,
         // ConfirmDialogModule,
         CheckboxModule,
         ReactiveFormsModule
@@ -57,8 +59,10 @@ interface ExportColumn {
   styleUrl: './house-owners.component.scss'
 })
 export class HouseOwnersComponent {
-  
-  
+  perPage:number=10;
+  totalRecords:number=0
+  dataLoading:boolean=false
+  skeletonRows = Array(5).fill(0);
   area:any=[]
     exportColumns!: ExportColumn[];
   
@@ -111,19 +115,19 @@ debugger
     
   }
   loadOwners() {
-   this.loading=true; 
+   this.dataLoading=true; 
       this.sharedService.sendGetRequest('/Owner/list').subscribe({
         next:(response :any)=>{    
           debugger   
           if(response && response.success){
             this.loading=false;
             this.owners=response.data;
-          }else{
-            this.loading=false;
           }
         },
         error:(error:any)=>{
-           this.loading=false;
+           this.dataLoading=false;
+        },complete:()=>{
+          this.dataLoading=false
         }
       })
   }
@@ -194,9 +198,9 @@ openUpdateDialog(owner: any) {
 
   saveOwner() {
     if (this.ownerForm.valid) {
+      this.loading=true
         this.sharedService.sendPostRequest('/Owner',this.ownerForm.value).subscribe({
-          next:(respose:any)=>{
-            
+          next:(respose:any)=>{            
             if(respose &&respose.success){
               this.toastrService.showToast({
                 type: 'success',
@@ -216,7 +220,9 @@ openUpdateDialog(owner: any) {
             }
           },
           error:(error:any)=>{
-    
+      this.loading=false
+          },complete:()=>{
+              this.loading=false
           }
         })
       } else {
