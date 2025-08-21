@@ -1,9 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
-import { CheckboxModule } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
@@ -18,46 +17,48 @@ import { TagModule } from 'primeng/tag';
 import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
-import { TherapistDetailComponent } from '../users/therapist-detail/therapist-detail.component';
-import { SharedService } from '../Shared/services/shared.service';
-import { TrigerToastService } from '../Shared/services/triger-toast.service';
+import { SharedService } from '../../../admin/Shared/services/shared.service';
+import { TrigerToastService } from '../../../admin/Shared/services/triger-toast.service';
 
 @Component({
-  selector: 'app-complaints',
-  imports: [
-     RouterModule,
-        CommonModule,
-        TableModule,
-        FormsModule,
-        ButtonModule,
-        RippleModule,
-        ToastModule,
-        ToolbarModule,
-        RatingModule,
-        InputTextModule,
-        TextareaModule,
-        SelectModule,
-        RadioButtonModule,
-        InputNumberModule,
-        DialogModule,
-        TagModule,
-        InputIconModule,
-        IconFieldModule,
-  ],
-  templateUrl: './complaints.component.html',
-  styleUrl: './complaints.component.scss'
+  selector: 'app-owner-complaints',
+  imports: [RouterModule,
+          CommonModule,
+          TableModule,
+          FormsModule,
+          ButtonModule,
+          RippleModule,
+          ToastModule,
+          ToolbarModule,
+          RatingModule,
+          InputTextModule,
+          TextareaModule,
+          SelectModule,
+          RadioButtonModule,
+          InputNumberModule,
+          DialogModule,
+          TagModule,
+          InputIconModule,
+          IconFieldModule,],
+  templateUrl: './owner-complaints.component.html',
+  styleUrl: './owner-complaints.component.scss'
 })
-export class ComplaintsComponent {
+export class OwnerComplaintsComponent {
 private sharedService=inject(SharedService);
 complaints:any=[];
 status:any
+ownerId:any
 private toastrService=inject(TrigerToastService)
 ngOnInit() {
+  this.sharedService.sharedData$.subscribe((data)=>{
+    debugger
+    this.ownerId=data.userId
+  })
   this.getComplaints();
 }
 
 getComplaints() {
-  this.sharedService.sendGetRequest('/Complaints/all').subscribe({
+  this.sharedService.sendGetRequest('/Complaints/my',[this.ownerId]).subscribe({
     next: (response: any) => {
       if (response.success) {
         this.complaints = response.data;
@@ -138,5 +139,6 @@ changeStatus(complaint: any) {
   }
   
   
+
 
 

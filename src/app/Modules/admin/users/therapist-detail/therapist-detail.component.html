@@ -1,62 +1,3 @@
-<!-- <div class="electricity-bill">
-  <div class="header">
-    <h2>{{ customerName }}</h2>
-    <p>{{ customerAddress }}</p>
-    <p>Customer ID: {{ customerId }}</p>
-    <p>Reference No: {{ referenceNo }}</p>
-  </div>
-  <div class="billing-details">
-    <h3>BILLING DETAILS FOR SERVICES</h3>
-    <p>WATER | SEVERAGE | SECURITY | MAINTENANCE</p>
-    <p>BILLING MONTH: {{ billingMonth }}</p>
-    <p>DEFERRED: {{ deferredAmount }}</p>
-    <p>ARREARS: {{ arrears }}</p>
-    <p>CURRENT BILL: {{ currentBill }}</p>
-    <p>PENDING AMOUNT: {{ pendingAmount }}</p>
-    <p>DUE DATE: {{ dueDate }}</p>
-    <p>PAYABLE BILL ON DUE DATE: {{ payableOnDueDate }}</p>
-    <p>PAYABLE BILL AFTER DUE DATE: {{ payableAfterDueDate }}</p>
-  </div>
-  <div class="billing-history">
-    <h3>BILLING HISTORY</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>MONTH</th>
-          <th>BILL</th>
-          <th>RECEIPT ID</th>
-          <th>PAID DATE</th>
-          <th>PAYMENT</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let history of billingHistory">
-          <td>{{ history.month }}</td>
-          <td>{{ history.bill }}</td>
-          <td>{{ history.receiptId }}</td>
-          <td>{{ history.paidDate }}</td>
-          <td>{{ history.payment }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="contact-info">
-    <h3>FOR SUPPLY FAILURE CONTACT</h3>
-    <p>COMPLAINT OFFICE: {{ complaintOffice }}</p>
-    <p>ONLINE ASKARI BANK ACCOUNT IBAN: {{ onlineBankAccount }}</p>
-    <p>After Payment Send it To: {{ billingEmail }}</p>
-  </div>
-  <div class="bank-copy">
-    <h3>BANK COPY</h3>
-    <p>MILITARY ACCOUNTS COPRATIVE HOUSING SOCIETY - BILLING</p>
-    <p>REFERENCE NO: {{ referenceNo }}</p>
-    <p>BILLING MONTH: {{ billingMonth }}</p>
-    <p>CUSTOMER ID: {{ customerId }}</p>
-    <p>DUE DATE: {{ dueDate }}</p>
-    <p>TOTAL PAYABLE: {{ payableOnDueDate }}</p>
-    <p>AFTER DUE DATE: {{ payableAfterDueDate }}</p>
-  </div>
-</div> -->
 
 
 
@@ -70,9 +11,11 @@
       MILITARY ACCOUNTS CO-OPERATIVE HOUSING SOCIETY
      </h5>
      <p>
-      AGHA KAMRAN
+      {{billData?.ownerName}}
       <br/>
-      24, MACHIS A, A BLOCK, MILITARY ACCOUNTS
+      Plot No :{{billData?.plotName}}
+      <br/>
+      Reference No :{{billData?.referenceNo}}
      </p>
     </div>
     
@@ -190,25 +133,18 @@
       MILITARY ACCOUNTS CO-OPERATIVE HOUSING SOCIETY - BILLING
      </p>
      <p>
-      REFERENCE NO: MACHIS2025
+      REFERENCE NO:{{billData.referenceNo}}
+     </p>
+     
+     
+     <p>
+      Plot No :{{billData.plotName}}
      </p>
      <p>
-      DECEMBER 2025
+      DUE DATE:{{billData.dueDate |date}}
      </p>
      <p>
-      CUSTOMER ID: MC01-220222-276
-     </p>
-     <p>
-      AGHA KAMRAN
-     </p>
-     <p>
-      24, MACHIS A, A BLOCK
-     </p>
-     <p>
-      DUE DATE: 10/12/2025
-     </p>
-     <p>
-      AMOUNT: Rs. 3450.00
+      AMOUNT: Rs.{{billData.amount}}
      </p>
     </div>
 

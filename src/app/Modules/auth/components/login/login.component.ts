@@ -65,8 +65,11 @@ export class LoginComponent {
         if (response?.success) {
           localStorage.setItem('Data@Salvao', JSON.stringify(response.data));
           this.sharedservice.sharedData.next(response.data); 
+          if(response.data.role.name=='Owner'){
+                  this.router.navigate(['/owner'])
+          }else{
           this.router.navigate(['/admin'])
-         
+          }
           this.toastService.showToast({
             type: 'success',
             shortMessage: 'Success!',
@@ -81,12 +84,7 @@ export class LoginComponent {
         }
       },
       error: (error) => {
-        debugger
-        this.toastService.showToast({
-          type: 'error',
-          shortMessage: 'Error!',
-          detail: error.error.message
-        });
+       
         this.loading = false;
       }
     });

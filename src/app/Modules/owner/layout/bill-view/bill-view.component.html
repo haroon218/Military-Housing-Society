@@ -1,23 +1,13 @@
 
 
-<p-table
-    #dt
-    [value]="complaints"
-    [rows]="5"
-
-    [paginator]="true"
+<p-table #dt [value]="bills" [rows]="5" [columns]="cols" [paginator]="true"
     [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
-    [tableStyle]="{ 'min-width': '75rem' }"
-
-    [rowHover]="true"
-    dataKey="id"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Compalaints"
-    [showCurrentPageReport]="true"
-    [rowsPerPageOptions]="[10, 20, 30]"
->
+    [tableStyle]="{ 'min-width': '75rem' }" [(selection)]="selectedProducts" [rowHover]="true" dataKey="id"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products" [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 20, 30]">
     <ng-template #caption>
         <div class="flex items-center justify-between">
-            <h5 class="m-0">Manage Complaints</h5>
+            <h5 class="m-0">Manage Bills</h5>
             <p-iconfield>
                 <p-inputicon styleClass="pi pi-search" />
                 <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..." />
@@ -29,29 +19,29 @@
             <!-- <th style="width: 3rem">
                 <p-tableHeaderCheckbox />
             </th> -->
-            <th>Complaint ID</th>
-            <th style="min-width: 2rem">Resident Name</th>
+         
             <th pSortableColumn="name" style="min-width:2rem">
-                Plot Number
-               
+                Month 
+                <p-sortIcon field="name" />
             </th>
+            
             <th pSortableColumn="name" style="min-width:2rem">
-                Title
+                Due Amount
                 <p-sortIcon field="name" />
             </th>
             <th pSortableColumn="name" style="min-width:2rem">
-                Description
-                <p-sortIcon field="name" />
+                Bill Date
+
             </th>
             <th pSortableColumn="name" style="min-width:2rem">
-                Complaint Date
-                <p-sortIcon field="name" />
+                Due Date
+
             </th>
             <th pSortableColumn="name" style="min-width:2rem">
-                Status
-                
+                Paid Date
+
             </th>
-           
+            <th style="min-width: 2rem">Status</th>
             <!-- <th>Image</th>
             <th pSortableColumn="price" style="min-width: 8rem">
                 Price
@@ -77,32 +67,30 @@
             <!-- <td style="width: 3rem">
                 <p-tableCheckbox [value]="product" />
             </td> -->
-            <td style="min-width: 2rem">{{ product.id }}</td>
-            <td style="min-width: 2rem">{{ product.owner.name }}</td>
-            <td>
-                {{ product.owner?.plots[0].name }}
-                </td>
-            <td style="min-width: 2rem">{{ product.title }}</td>
-           
-            <td>{{ product.description  }}</td>
-            <td>{{ product.createdAt |date   }}</td>
+            
+            <td style="min-width: 2rem">{{ product.monthName }}</td>
 
+          
+          
+            <td>{{ product.amount }}</td>
+            <td>{{ product.issueDate | date:'dd/MM/yyyy' }}</td>
+            <td>{{ product.dueDate | date:'dd/MM/yyyy' }}</td>
+            <td>{{ product.paidDate | date:'dd/MM/yyyy' }}</td>
             <td>
                 <p-tag [value]="product.status" [severity]="getSeverity(product.status)" />
             </td>
             <td>
                
-          
-  <p-select
-    [options]="statuses" 
-    [(ngModel)]="status" appendTo="body"
-    placeholder="Change Status"
-    (onChange)="changeStatus(product)">
-  </p-select>
-</td>
-
-        
+               <p-button icon="pi pi-print" severity="danger" [rounded]="true" [outlined]="true"
+                    (click)="printBill(product.id)" />
+            </td>
         </tr>
     </ng-template>
 </p-table>
 
+
+<div>
+    <app-therapist-detail *ngIf="showPrintView" [showPrintView]="showPrintView" [billData]="selectedBill"
+        (closePrint)="closePrintView()">
+    </app-therapist-detail>
+</div>

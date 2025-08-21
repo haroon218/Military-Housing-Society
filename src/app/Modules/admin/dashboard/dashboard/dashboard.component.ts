@@ -2,92 +2,83 @@ import { Component } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
 import { debounceTime, Subscription } from 'rxjs';
 import { LayoutService } from '../../layout/service/layout.service';
+import { SelectModule } from 'primeng/select';
+import { FormsModule } from '@angular/forms';
+import { SharedService } from '../../Shared/services/shared.service';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [ChartModule],
+  imports: [ChartModule,SelectModule,FormsModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent {
   chartData: any;
-
+years: number[] = [];
+months: any[] = [];
+selectedYear: number = new Date().getFullYear();
+selectedMonth?: number;
   chartOptions: any;
-
+ totalAmount :any;
+    paidAmount : any;
+    paidCount : any;
+    unpaidCount :any;
   subscription!: Subscription;
 
-  constructor(public layoutService:LayoutService) {
+  constructor(public layoutService:LayoutService,private sharedService:SharedService) {
       this.subscription = this.layoutService.configUpdate$.pipe(debounceTime(25)).subscribe(() => {
-          this.initChart();
+          
       });
   }
 
   ngOnInit() {
-      this.initChart();
+   this.sharedService.sendGetRequest('/Dashboard/filters').subscribe((res:any) => {
+    if(res.success){
+    this.years = res.data.years;
+    this.months = res.data.months;
+    this.selectedYear = this.years[0];
+    this.loadSummary();
+    this.loadChart();
+    }
+  });
   }
-
-  initChart() {
-    const documentStyle = getComputedStyle(document.documentElement);
-    const textColor = documentStyle.getPropertyValue('--text-color');
-    const borderColor = documentStyle.getPropertyValue('--surface-border');
-    const textMutedColor = documentStyle.getPropertyValue('--text-color-secondary');
-
+loadSummary() {
+  this.sharedService.sendGetRequest('/Dashboard/summary',[],{year:this.selectedYear, month:this.selectedMonth}).subscribe((summary:any) => {
+    if(summary.success){
+    this.totalAmount = summary.data.totalAmount;
+    this.paidAmount = summary.data.paidAmount;
+    this.paidCount = summary.data.paidCount;
+    this.unpaidCount = summary.data.unpaidCount;
+    }
+  });
+  
+}
+loadChart() {
+  this.sharedService.sendGetRequest('/Dashboard/chart',[],{year:this.selectedYear,}).subscribe((data:any) => {
+     if(data.success){
+        debugger
     this.chartData = {
-        labels: ['Jan', 'Feb', 'March', 'Apr'],
-        datasets: [
-            {
-                type: 'bar',
-                label: 'Paid Bills',
-                backgroundColor: documentStyle.getPropertyValue('--p-primary-400'),
-                data: [5000, 12000, 18000, 6000], // Sample Paid Bills Data
-                barThickness: 32
-            },
-            {
-                type: 'bar',
-                label: 'Unpaid Bills',
-                backgroundColor: 'rgba(192, 53, 83, 0.98)',
-                data: [3000, 5000, 7000, 4000], // Sample Unpaid Bills Data
-                barThickness: 32
-            }
-        ]
-    };
-
-    this.chartOptions = {
-        maintainAspectRatio: false,
-        aspectRatio: 0.8,
-        plugins: {
-            legend: {
-                labels: {
-                    color: textColor
-                }
-            }
+      labels: data.data.map((d: any) => d.monthName),
+      datasets: [
+        {
+          type: 'bar',
+          label: 'Paid Bills Amount ',
+          backgroundColor: '#22c55e',
+          data: data.data.map((d: any) => d.paidAmount),
+          barThickness: 32
         },
-        scales: {
-            x: {
-                stacked: true,
-                ticks: {
-                    color: textMutedColor
-                },
-                grid: {
-                    color: 'transparent',
-                    borderColor: 'transparent'
-                }
-            },
-            y: {
-                stacked: true,
-                ticks: {
-                    color: textMutedColor
-                },
-                grid: {
-                    color: borderColor,
-                    borderColor: 'transparent',
-                    drawTicks: false
-                }
-            }
+        {
+          type: 'bar',
+          label: 'Unpaid Bills Amount',
+          backgroundColor: '#ef4444',
+          data: data.data.map((d: any) => d.unpaidAmount),
+          barThickness: 32
         }
+      ]
     };
 }
-
+  });
+}
 
   ngOnDestroy() {
       if (this.subscription) {

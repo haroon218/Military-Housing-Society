@@ -1,7 +1,6 @@
 <p-toolbar styleClass="mb-6">
     <ng-template #start>
         <p-button label="New" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="openNew()" />
-        <p-button severity="secondary" label="Delete" icon="pi pi-trash" outlined (onClick)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length" />
     </ng-template>
 
     <!-- <ng-template #end>
@@ -11,7 +10,7 @@
 
 <p-table
     #dt
-    [value]="products()"
+    [value]="users"
     [rows]="5"
     [columns]="cols"
     [paginator]="true"
@@ -44,10 +43,7 @@
                 Role
                 <p-sortIcon field="name" />
             </th>
-            <th pSortableColumn="name" style="max-width:16rem">
-                Description
-                <p-sortIcon field="name" />
-            </th>
+            
             <!-- <th>Image</th>
             <th pSortableColumn="price" style="min-width: 8rem">
                 Price
@@ -61,83 +57,65 @@
                 Reviews
                 <p-sortIcon field="rating" />
             </th> -->
-            <th pSortableColumn="inventoryStatus" style="max-width: 12rem">
-                Status
-                <p-sortIcon field="inventoryStatus" />
-            </th>
+          
             <th style="max-width: 12rem">Action</th>
         </tr>
     </ng-template>
-    <ng-template #body let-product>
+    <ng-template #body let-user>
         <tr>
             <!-- <td style="width: 3rem">
                 <p-tableCheckbox [value]="product" />
             </td> -->
-            <td style="max-width: 12rem">{{ product.name }}</td>
-            <td style="max-width: 12rem">{{ product.email }}</td>
+            <td style="max-width: 12rem">{{ user.username }}</td>
+            <td style="max-width: 12rem">{{ user.email }}</td>
 
-            <td style="max-width: 16rem">{{ product.role }}</td>
-            <td>
-            {{ product.description }}
-            </td>
+            <td style="max-width: 16rem">{{ user.role.name }}</td>
+           
             <!-- <td>{{ product.price | currency: 'USD' }}</td>
             <td>{{ product.category }}</td>
             <td>
                 <p-rating [(ngModel)]="product.rating" [readonly]="true" />
             </td> -->
+          
             <td>
-                <p-tag [value]="product.inventoryStatus" [severity]="getSeverity(product.inventoryStatus)" />
-            </td>
-            <td>
-                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editProduct(product)"  />
-                <p-button icon="pi pi-trash" severity="danger" class="mr-2" [rounded]="true" [outlined]="true" (click)="deleteProduct(product)" />
-                <p-button icon="pi pi-cog" severity="danger" [rounded]="true" [outlined]="true" [routerLink]="['/admin/user/detail',product.id]" />
+                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (onClick)="openUpdateDialog(user)"  />
+                <p-button icon="pi pi-trash" severity="danger" class="mr-2" [rounded]="true" [outlined]="true" (click)="deleteUser(user.id)" />
+            
 
             </td>
         </tr>
     </ng-template>
 </p-table>
 
-<p-dialog [(visible)]="productDialog" [style]="{ width: '450px' }" header="Add User" [modal]="true"
-[draggable]="false">
-    <ng-template #content>
-        <div class="flex flex-col gap-6">
-            <!-- <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.image" class="block m-auto pb-4" *ngIf="product.image" /> -->
-            <div>
-                <label for="name" class="block font-bold mb-3">Name</label>
-                <input type="text" pInputText id="name" placeholder="Enter Name" [(ngModel)]="product.name" required autofocus fluid />
-                <small class="text-red-500" *ngIf="submitted && !product.name">Name is required.</small>
-            </div>
-            <div>
-                <label for="name" class="block font-bold mb-3">Email</label>
-                <input type="text" pInputText id="name" placeholder="Enter Email" [(ngModel)]="product.email" required autofocus fluid />
-                <small class="text-red-500" *ngIf="submitted && !product.name">Name is required.</small>
-            </div>
-            <div>
-            <label for="description" class="block font-bold mb-3">Role</label>
-            <div class="flex items-center">
-               <p-checkbox inputId="ingredient1" name="pizza"value="Cheese" [(ngModel)]="pizza" />
-               <label for="ingredient1" class="ml-2"> Super Admin </label>
-            </div>
-           <div class="flex items-center mt-1">
-            <p-checkbox inputId="ingredient2" name="pizza" value="Mushroom" [(ngModel)]="pizza" />
-            <label for="ingredient2" class="ml-2"> Admin </label>
-           </div>
-          <div class="flex items-center mt-1">
-            <p-checkbox inputId="ingredient3" name="pizza" value="Pepper" [(ngModel)]="pizza" />
-            <label for="ingredient3" class="ml-2"> User </label>
-          </div>
-            </div>
-            <div>
-                <label for="description" class="block font-bold mb-3">Description</label>
-                <textarea id="description" placeholder="Enter Description" pTextarea [(ngModel)]="product.description" required rows="3" cols="20" fluid></textarea>
-            </div>
-        </div>
-    </ng-template>
+<p-dialog [(visible)]="userDialog" [style]="{ width: '450px' }" [modal]="true" header="{{ userId ? 'Edit User' : 'Add User' }}" [draggable]="false">
+  <form [formGroup]="userForm" >
+    <div class="flex flex-col gap-6">
+      <div>
+        <label class="block font-bold mb-3">Name</label>
+        <input type="text" pInputText formControlName="username" placeholder="Enter Name"  class="w-full"/>
+        <small class="text-red-500" *ngIf="submitted && userForm.controls['name'].invalid">Name is required.</small>
+      </div>
 
-    <ng-template #footer>
-        <p-button label="Cancel" icon="pi pi-times" text (click)="hideDialog()" />
-        <p-button label="Save" icon="pi pi-check" (click)="saveProduct()" />
+      <div>
+        <label class="block font-bold mb-3">Email</label>
+        <input type="email" pInputText formControlName="email" placeholder="Enter Email" class="w-full" />
+        <small class="text-red-500" *ngIf="submitted && userForm.controls['email'].invalid">Valid Email is required.</small>
+      </div>
+
+      <div>
+        <label class="block font-bold mb-3">Role</label>
+        <p-select [options]="roles" optionLabel="name" optionValue="id" formControlName="roleId" placeholder="Select Role"  class="w-full" appendTo="body"></p-select>
+        <small class="text-red-500" *ngIf="submitted && userForm.controls['roleId'].invalid">Role is required.</small>
+      </div>
+
+    </div>
+
+  
+  </form>
+    <ng-template pTemplate="footer">
+      <p-button label="Cancel" icon="pi pi-times" text (click)="hideDialog()"></p-button>
+      <button pButton type="submit" label="Save" icon="pi pi-check" (click)="userId?updateUser():saveUser()"></button>
     </ng-template>
 </p-dialog>
+
 

@@ -1,14 +1,4 @@
-<p-toolbar styleClass="mb-6">
-    <ng-template #start>
-        <p-button label="New" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="openNew()" />
-        <p-button severity="secondary" label="Delete" icon="pi pi-trash" outlined (onClick)="deleteSelectedProducts()"
-            [disabled]="!selectedProducts || !selectedProducts.length" />
-    </ng-template>
 
-    <!-- <ng-template #end>
-        <p-button label="Export" icon="pi pi-upload" severity="secondary" (onClick)="exportCSV()" />
-    </ng-template> -->
-</p-toolbar>
 
 <p-table #dt [value]="bills" [rows]="5" [columns]="cols" [paginator]="true"
     [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
@@ -31,18 +21,12 @@
             </th> -->
             <th style="min-width: 2rem">Bill Id</th>
             <th style="min-width: 2rem">Owner Name</th>
-            <th pSortableColumn="name" style="min-width:2rem">
-                Block Name
-
-            </th>
+            
             <th pSortableColumn="name" style="min-width:2rem">
                 Plot NO
                 <p-sortIcon field="name" />
             </th>
-            <th pSortableColumn="name" style="min-width:2rem">
-                Bill Area
-                <p-sortIcon field="name" />
-            </th>
+            
             <th pSortableColumn="name" style="min-width:2rem">
                 Due Amount
                 <p-sortIcon field="name" />
@@ -88,11 +72,11 @@
             <td style="min-width: 2rem">{{ product.id }}</td>
             <td style="min-width: 2rem">{{ product.owner.name }}</td>
 
-            <td style="min-width: 2rem">{{ product.block_name }}</td>
+          
             <td>
                 {{ product.plot.name }}
             </td>
-            <td>{{ product.bill_area }}</td>
+           
             <td>{{ product.amount }}</td>
             <td>{{ product.issueDate | date:'dd/MM/yyyy' }}</td>
             <td>{{ product.dueDate | date:'dd/MM/yyyy' }}</td>

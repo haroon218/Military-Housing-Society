@@ -6,6 +6,7 @@ import { BlockComponent } from '../block/block.component';
 import { AreaComponent } from '../area/area.component';
 import { PlotsComponent } from '../plots/plots.component';
 import { ComplaintsComponent } from '../complaints/complaints.component';
+import { EventsComponent } from '../events/events.component';
 
 const routes: Routes = [
  {
@@ -15,6 +16,7 @@ const routes: Routes = [
         { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
         { path: 'dashboard', component: DashboardComponent },
         { path: 'Complaints', component: ComplaintsComponent },
+         { path: 'events', component:EventsComponent },
 
         { 
           path: 'user',

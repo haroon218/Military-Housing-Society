@@ -1,20 +1,8 @@
-
-
-<p-table
-    #dt
-    [value]="complaints"
-    [rows]="5"
-
-    [paginator]="true"
+<p-table #dt [value]="complaints" [rows]="5" [paginator]="true"
     [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
-    [tableStyle]="{ 'min-width': '75rem' }"
-
-    [rowHover]="true"
-    dataKey="id"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Compalaints"
-    [showCurrentPageReport]="true"
-    [rowsPerPageOptions]="[10, 20, 30]"
->
+    [tableStyle]="{ 'min-width': '75rem' }" [rowHover]="true" dataKey="id"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Compalaints" [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 20, 30]">
     <ng-template #caption>
         <div class="flex items-center justify-between">
             <h5 class="m-0">Manage Complaints</h5>
@@ -29,29 +17,24 @@
             <!-- <th style="width: 3rem">
                 <p-tableHeaderCheckbox />
             </th> -->
-            <th>Complaint ID</th>
-            <th style="min-width: 2rem">Resident Name</th>
-            <th pSortableColumn="name" style="min-width:2rem">
-                Plot Number
-               
-            </th>
-            <th pSortableColumn="name" style="min-width:2rem">
+
+            <th pSortableColumn="name">
                 Title
                 <p-sortIcon field="name" />
             </th>
-            <th pSortableColumn="name" style="min-width:2rem">
+            <th pSortableColumn="name">
                 Description
                 <p-sortIcon field="name" />
             </th>
-            <th pSortableColumn="name" style="min-width:2rem">
+            <th pSortableColumn="name">
                 Complaint Date
                 <p-sortIcon field="name" />
             </th>
-            <th pSortableColumn="name" style="min-width:2rem">
+            <th pSortableColumn="name">
                 Status
-                
+
             </th>
-           
+
             <!-- <th>Image</th>
             <th pSortableColumn="price" style="min-width: 8rem">
                 Price
@@ -69,40 +52,22 @@
                 Status
                 <p-sortIcon field="inventoryStatus" />
             </th> -->
-            <th style="min-width: 2rem">Action</th>
+
         </tr>
     </ng-template>
     <ng-template #body let-product>
         <tr>
-            <!-- <td style="width: 3rem">
-                <p-tableCheckbox [value]="product" />
-            </td> -->
-            <td style="min-width: 2rem">{{ product.id }}</td>
-            <td style="min-width: 2rem">{{ product.owner.name }}</td>
-            <td>
-                {{ product.owner?.plots[0].name }}
-                </td>
-            <td style="min-width: 2rem">{{ product.title }}</td>
-           
-            <td>{{ product.description  }}</td>
-            <td>{{ product.createdAt |date   }}</td>
+            <td>{{ product.title }}</td>
+
+            <td>{{ product.description }}</td>
+            <td>{{ product.createdAt |date }}</td>
 
             <td>
                 <p-tag [value]="product.status" [severity]="getSeverity(product.status)" />
             </td>
-            <td>
-               
           
-  <p-select
-    [options]="statuses" 
-    [(ngModel)]="status" appendTo="body"
-    placeholder="Change Status"
-    (onChange)="changeStatus(product)">
-  </p-select>
-</td>
 
-        
+
         </tr>
     </ng-template>
 </p-table>
-

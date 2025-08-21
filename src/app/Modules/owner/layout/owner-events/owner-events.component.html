@@ -1,0 +1,112 @@
+
+<p-table #dt [value]="faqData" [rows]="perPage" [loading]="dataLoading" loadingIcon="none" [paginator]="true"
+    [rowHover]="true" [totalRecords]="totalRecords" [lazy]="true" [scrollable]="true" scrollHeight="67vh"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vents" [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[20,30,40]" (onPage)="onPageChange($event)">
+    <ng-template #caption>
+        <div class="flex items-center justify-between w-full">
+            <h5 class="m-0">Manage Events</h5>
+                 
+
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+        
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-faq>
+        @if(!dataLoading && faqData.length>0){
+        <tr>
+            <td>{{ faq.title }}</td>
+            <!-- <td>{{ faq.answer }}</td>/ -->
+            <td>{{faq.description}}</td>
+           
+        </tr>
+    }
+    </ng-template>
+    <ng-template pTemplate="loadingbody">
+        <tr *ngFor="let _ of skeletonRows">
+            <td><p-skeleton></p-skeleton></td>
+            <td><p-skeleton></p-skeleton></td>
+            <td><p-skeleton></p-skeleton></td>
+            <td><p-skeleton></p-skeleton></td>
+            <td><p-skeleton></p-skeleton></td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="6">
+                <div style="
+                        margin-top: 20px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 100%;
+                        flex-direction: column;
+                        color: #888;
+                    ">
+                    <i class="pi pi-exclamation-circle" style="font-size: 2rem; color: red;"></i>
+                    <div style="margin-top: 1rem;">{{error?error:'No Records Found'}}
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+
+<p-dialog [(visible)]="questionDialog" [style]="{ width: '750px', height: '400px' }"
+    [header]="isViewMode ? 'View Events' : (is_update ? 'Update Events' : 'Add Events')" [modal]="true"
+    [draggable]="false" (onHide)="resetQuestionForm()">
+    <form [formGroup]="questionForm" class="p-fluid grid">
+        <!-- FAQ Type Dropdown (Patient/Therapist) -->
+
+        <!-- Question Textarea -->
+        <div class="col-12 field mb-4">
+            <label for="question" class="block font-bold mb-2" style="font-size:14px;">Title :</label>
+            <textarea class="w-full" style="max-height:60px;"
+                id="question" pTextarea rows="3" placeholder="Enter the Title"
+                formControlName="title" [disabled]="isViewMode"></textarea>
+            @if (questionForm.get('title')?.touched && questionForm.get('title')?.hasError('required')) {
+                <small class="text-red-500 block mt-1">Title is required</small>
+            }
+        </div>
+
+        <!-- Answer Textarea -->
+        <div class="col-12 gap-4 mb-4">
+            <label for="answer" class="block font-bold mb-2" style="font-size:14px;">Description :</label>
+            <textarea class="w-full" 
+                id="answer" pTextarea rows="3" placeholder="Enter the Description"
+                formControlName="description" [disabled]="isViewMode"></textarea>
+            @if (questionForm.get('description')?.touched && questionForm.get('description')?.hasError('required')) {
+                <small class="text-red-500 block mt-1">Description is required</small>
+            }
+        </div>
+    </form>
+    <ng-template #footer>
+        <div class="flex justify-content-end gap-2">
+            <p-button label="Cancel" icon="pi pi-times" severity="secondary" (click)="closeQuestionDialog()"></p-button>
+            @if(!isViewMode){
+                <p-button [label]="is_update ? 'Update' : 'Add'" icon="pi pi-check" [loading]="isLoading"
+                    (click)="savefaq()"></p-button>
+            }
+        </div>
+    </ng-template>
+</p-dialog>
+<p-dialog [(visible)]="deleteRoleDialogShow" [style]="{ width: '450px' }" header="Delete Role" [modal]="true"
+    [draggable]="true">
+    <ng-template #content>
+        <div class="flex">
+            <i class="pi pi-exclamation-triangle" style="font-size: 15px;"></i>
+            <span class="ml-2"> Are you sure you want to delete ?</span>
+        </div>
+    </ng-template>
+
+    <ng-template #footer>
+        <p-button label="No" (click)="deleteRoleDialogShow = false" />
+        <p-button severity="danger" [label]="isLoading?'':'Yes'" [loading]="isLoading" (click)="deleteRole()" />
+    </ng-template>
+</p-dialog>

@@ -80,6 +80,13 @@ export class AppMenu {
              ]
             },
             {
+                label: 'Events',
+                items: [
+                    { label: 'Events', icon: 'pi pi-fw pi-comments',routerLink: ['/admin/events'] }
+                   
+             ]
+            },
+            {
                 label: 'Auth',
                 icon: 'pi pi-fw pi-briefcase',
                 routerLink: ['/pages'],
